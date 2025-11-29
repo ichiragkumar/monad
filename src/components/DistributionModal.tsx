@@ -18,7 +18,7 @@ interface DistributionModalProps {
 export default function DistributionModal({
   isOpen,
   onClose,
-  eventId,
+  eventId: _eventId,
   participants,
   onSuccess,
 }: DistributionModalProps) {
@@ -27,12 +27,11 @@ export default function DistributionModal({
   const [equalAmount, setEqualAmount] = useState('')
   const [amounts, setAmounts] = useState<{ [key: string]: string }>({})
   const [isApproving, setIsApproving] = useState(false)
+  const [needsApproval, setNeedsApproval] = useState(false)
 
   const { data: tokenBalance } = useBalance({
     address,
-    token: TOKEN_CONTRACT_ADDRESS !== '0x0000000000000000000000000000000000000000' 
-      ? TOKEN_CONTRACT_ADDRESS 
-      : undefined,
+    token: TOKEN_CONTRACT_ADDRESS as `0x${string}`,
   })
 
   const {
@@ -48,8 +47,28 @@ export default function DistributionModal({
     refetchAllowance,
   } = useAirdrop()
 
-  const [needsApproval, setNeedsApproval] = useState(false)
-  const [isApproving, setIsApproving] = useState(false)
+  // Initialize amounts for variable distribution
+  useEffect(() => {
+    if (distributionType === 'variable' && participants.length > 0) {
+      const initialAmounts: { [key: string]: string } = {}
+      participants.forEach(p => {
+        initialAmounts[p.address] = p.amount || ''
+      })
+      setAmounts(initialAmounts)
+    }
+  }, [distributionType, participants])
+
+  const calculateTotal = () => {
+    if (distributionType === 'equal') {
+      return equalAmount ? parseFloat(equalAmount) * participants.length : 0
+    } else {
+      return Object.values(amounts).reduce((sum, amt) => {
+        return sum + (amt ? parseFloat(amt) : 0)
+      }, 0)
+    }
+  }
+
+  const totalAmount = calculateTotal()
 
   useEffect(() => {
     if (isSuccess) {
@@ -74,29 +93,6 @@ export default function DistributionModal({
       }
     }
   }, [totalAmount, tokenBalance, allowance])
-
-  // Initialize amounts for variable distribution
-  useEffect(() => {
-    if (distributionType === 'variable' && participants.length > 0) {
-      const initialAmounts: { [key: string]: string } = {}
-      participants.forEach(p => {
-        initialAmounts[p.address] = p.amount || ''
-      })
-      setAmounts(initialAmounts)
-    }
-  }, [distributionType, participants])
-
-  const calculateTotal = () => {
-    if (distributionType === 'equal') {
-      return equalAmount ? parseFloat(equalAmount) * participants.length : 0
-    } else {
-      return Object.values(amounts).reduce((sum, amt) => {
-        return sum + (amt ? parseFloat(amt) : 0)
-      }, 0)
-    }
-  }
-
-  const totalAmount = calculateTotal()
   const hasEnoughBalance = tokenBalance && totalAmount > 0 
     ? parseFloat(formatUnits(tokenBalance.value, tokenBalance.decimals)) >= totalAmount
     : false

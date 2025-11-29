@@ -53,20 +53,31 @@ async function main() {
 
     if (ensRegistryAddress && ensResolverAddress && parentNode) {
       console.log("\n3. Deploying ENSSubdomainRegistrar...");
-      const ENSRegistrar = await ethers.getContractFactory("ENSSubdomainRegistrar");
-      const ensRegistrar = await ENSRegistrar.deploy(
-        ensRegistryAddress,
-        ensResolverAddress,
-        parentNode,
-        deployer.address
-      );
-      await ensRegistrar.waitForDeployment();
-      const ensRegistrarAddress = await ensRegistrar.getAddress();
-      contracts.ENSSubdomainRegistrar = ensRegistrarAddress;
-      console.log("   ✓ ENSSubdomainRegistrar deployed to:", ensRegistrarAddress);
+      try {
+        // Ensure addresses are valid hex (not ENS names) to avoid resolution errors
+        const registryAddr = ethers.getAddress(ensRegistryAddress);
+        const resolverAddr = ethers.getAddress(ensResolverAddress);
+        
+        const ENSRegistrar = await ethers.getContractFactory("ENSSubdomainRegistrar");
+        const ensRegistrar = await ENSRegistrar.deploy(
+          registryAddr,
+          resolverAddr,
+          parentNode,
+          deployer.address
+        );
+        await ensRegistrar.waitForDeployment();
+        const ensRegistrarAddress = await ensRegistrar.getAddress();
+        contracts.ENSSubdomainRegistrar = ensRegistrarAddress;
+        console.log("   ✓ ENSSubdomainRegistrar deployed to:", ensRegistrarAddress);
+      } catch (error: any) {
+        console.log("   ⚠️  ENSSubdomainRegistrar deployment failed:", error.message);
+        console.log("   This is expected if ENS is not available on this network");
+        console.log("   You can deploy it later when ENS infrastructure is available");
+      }
     } else {
       console.log("\n3. Skipping ENSSubdomainRegistrar (missing env variables)");
       console.log("   Set ENS_REGISTRY_ADDRESS, ENS_RESOLVER_ADDRESS, and ENS_PARENT_NODE to deploy");
+      console.log("   Note: ENS may not be available on Monad testnet yet");
     }
 
     // Get network info

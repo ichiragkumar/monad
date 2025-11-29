@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAccount, usePublicClient } from 'wagmi'
 import { TOKEN_CONTRACT_ADDRESS } from '@/config/wagmi'
-import { erc20Abi, formatUnits } from 'viem'
+import { formatUnits } from 'viem'
 
 export interface Transaction {
   hash: string
@@ -21,7 +21,7 @@ export function useTransactionHistory() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!address || !publicClient || TOKEN_CONTRACT_ADDRESS === '0x0000000000000000000000000000000000000000') {
+    if (!address || !publicClient) {
       // Try to load from localStorage
       const stored = localStorage.getItem(`transactions-${address}`)
       if (stored) {

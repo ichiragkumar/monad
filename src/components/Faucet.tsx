@@ -1,9 +1,6 @@
-import { useState, useEffect } from 'react'
-import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
-import { parseEther } from 'ethers'
+import { useState } from 'react'
+import { useAccount } from 'wagmi'
 import { Droplet, Check } from 'lucide-react'
-import { TOKEN_CONTRACT_ADDRESS } from '@/config/wagmi'
-import { erc20Abi } from 'viem'
 import './Faucet.css'
 
 interface FaucetProps {
@@ -14,23 +11,13 @@ export default function Faucet({ onSuccess }: FaucetProps) {
   const { address, isConnected } = useAccount()
   const [isClaiming, setIsClaiming] = useState(false)
   const [claimed, setClaimed] = useState(false)
-
-  const { 
-    writeContract, 
-    data: hash, 
-    isPending, 
-    error 
-  } = useWriteContract()
-
-  const { isLoading: isConfirming, isSuccess } = 
-    useWaitForTransactionReceipt({
-      hash,
-    })
+  const [error, setError] = useState<string | null>(null)
 
   const handleClaim = async () => {
     if (!address || !isConnected) return
 
     setIsClaiming(true)
+    setError(null)
     try {
       // For testnet: This would call a faucet contract's claim function
       // For now, we'll simulate or use a backend endpoint
@@ -47,18 +34,16 @@ export default function Faucet({ onSuccess }: FaucetProps) {
       // or integrate with a backend API that mints test tokens
       alert('Faucet functionality will be available after token deployment. For now, contact the team to receive test tokens.')
       setClaimed(true)
-    } catch (err) {
+      if (onSuccess) {
+        onSuccess()
+      }
+    } catch (err: any) {
       console.error('Error claiming tokens:', err)
+      setError(err.message || 'Failed to claim tokens')
     } finally {
       setIsClaiming(false)
     }
   }
-
-  useEffect(() => {
-    if (isSuccess && onSuccess) {
-      onSuccess()
-    }
-  }, [isSuccess, onSuccess])
 
   if (!isConnected) {
     return null
@@ -76,9 +61,9 @@ export default function Faucet({ onSuccess }: FaucetProps) {
       <button
         className="btn btn-faucet"
         onClick={handleClaim}
-        disabled={isPending || isConfirming || isClaiming || claimed}
+        disabled={isClaiming || claimed}
       >
-        {isPending || isConfirming || isClaiming 
+        {isClaiming 
           ? 'Claiming...' 
           : claimed 
             ? (
@@ -96,20 +81,9 @@ export default function Faucet({ onSuccess }: FaucetProps) {
       </button>
       {error && (
         <div className="faucet-error">
-          {error.message || 'Failed to claim tokens'}
+          {error}
         </div>
-      )}
-      {hash && (
-        <a
-          href={`#`} // Update with explorer URL
-          target="_blank"
-          rel="noopener noreferrer"
-          className="faucet-tx-link"
-        >
-          View transaction
-        </a>
       )}
     </div>
   )
 }
-

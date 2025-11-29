@@ -3,6 +3,9 @@ import { parseEther } from 'ethers'
 import { erc20Abi } from 'viem'
 import { TOKEN_CONTRACT_ADDRESS, AIRDROP_HELPER_ADDRESS } from '@/config/wagmi'
 
+// AirdropHelper contract address (imported from config)
+const AIRDROP_HELPER = AIRDROP_HELPER_ADDRESS as `0x${string}`
+
 // AirdropHelper contract ABI
 const airdropHelperAbi = [
   {
@@ -45,23 +48,19 @@ export function useAirdrop() {
     functionName: 'allowance',
     args: [
       (address || '0x0000000000000000000000000000000000000000') as `0x${string}`,
-      AIRDROP_HELPER_ADDRESS,
+      AIRDROP_HELPER,
     ],
     query: {
-      enabled: !!address && TOKEN_CONTRACT_ADDRESS !== '0x0000000000000000000000000000000000000000',
+      enabled: !!address,
     },
   })
 
   const approveAirdropHelper = async (amount: bigint) => {
-    if (TOKEN_CONTRACT_ADDRESS === '0x0000000000000000000000000000000000000000') {
-      throw new Error('Token contract not deployed')
-    }
-
     return writeContract({
       address: TOKEN_CONTRACT_ADDRESS as `0x${string}`,
       abi: erc20Abi,
       functionName: 'approve',
-      args: [AIRDROP_HELPER_ADDRESS, amount],
+      args: [AIRDROP_HELPER, amount],
     })
   }
 
@@ -69,14 +68,10 @@ export function useAirdrop() {
     recipients: `0x${string}`[],
     amount: string
   ) => {
-    if (AIRDROP_HELPER_ADDRESS === '0x0000000000000000000000000000000000000000') {
-      throw new Error('AirdropHelper contract not deployed')
-    }
-
     const amountWei = parseEther(amount)
 
     return writeContract({
-      address: AIRDROP_HELPER_ADDRESS,
+      address: AIRDROP_HELPER,
       abi: airdropHelperAbi,
       functionName: 'airdropEqual',
       args: [TOKEN_CONTRACT_ADDRESS as `0x${string}`, recipients, amountWei],
@@ -87,14 +82,10 @@ export function useAirdrop() {
     recipients: `0x${string}`[],
     amounts: string[]
   ) => {
-    if (AIRDROP_HELPER_ADDRESS === '0x0000000000000000000000000000000000000000') {
-      throw new Error('AirdropHelper contract not deployed')
-    }
-
     const amountsWei = amounts.map(amt => parseEther(amt))
 
     return writeContract({
-      address: AIRDROP_HELPER_ADDRESS,
+      address: AIRDROP_HELPER,
       abi: airdropHelperAbi,
       functionName: 'airdropVariable',
       args: [TOKEN_CONTRACT_ADDRESS as `0x${string}`, recipients, amountsWei],

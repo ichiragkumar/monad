@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useAccount } from 'wagmi'
 import { X, Plus, Upload } from 'lucide-react'
 import { Participant } from '@/types'
 import { formatAddress } from '@/utils/format'
@@ -18,7 +17,7 @@ interface ParticipantManagerProps {
 export default function ParticipantManager({
   isOpen,
   onClose,
-  eventId,
+  eventId: _eventId,
   participants,
   onAddParticipants,
   onRemoveParticipant,

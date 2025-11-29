@@ -38,9 +38,7 @@ export default function Wallet() {
   // Get token balance
   const { data: tokenBalance, refetch: refetchTokenBalance } = useBalance({
     address,
-    token: TOKEN_CONTRACT_ADDRESS !== '0x0000000000000000000000000000000000000000' 
-      ? TOKEN_CONTRACT_ADDRESS 
-      : undefined,
+    token: TOKEN_CONTRACT_ADDRESS as `0x${string}`,
   })
 
   // Write contract for token transfer

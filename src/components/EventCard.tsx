@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Calendar, Users, Gift, ChevronDown, ChevronUp, Plus, Send } from 'lucide-react'
 import { Event } from '@/types'
-import { formatAddress, formatTimestamp } from '@/utils/format'
+import { formatTimestamp } from '@/utils/format'
 import './EventCard.css'
 
 interface EventCardProps {

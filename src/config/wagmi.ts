@@ -35,7 +35,7 @@ export const config = createConfig({
       },
     }),
     walletConnect({
-      projectId: 'YOUR_WALLETCONNECT_PROJECT_ID', // Replace with actual project ID
+      projectId: 'cb5be958d603567487c52cd49e585965', // Replace with actual project ID
     }),
   ],
   transports: {
@@ -44,12 +44,12 @@ export const config = createConfig({
   },
 })
 
-// Token contract address (will be deployed on Monad testnet)
-export const TOKEN_CONTRACT_ADDRESS = '0x0000000000000000000000000000000000000000' // Update after deployment
+// Token contract address (deployed on Monad testnet - Latest Deployment)
+export const TOKEN_CONTRACT_ADDRESS = '0x151310CEAC3686C08c83E423a7E5Bf4EC04b3bD3' // XToken deployed
 
-// AirdropHelper contract address (update after deployment)
-export const AIRDROP_HELPER_ADDRESS = '0x0000000000000000000000000000000000000000' // Update after deployment
+// AirdropHelper contract address (deployed on Monad testnet - Latest Deployment)
+export const AIRDROP_HELPER_ADDRESS = '0x41155e50E49a189De6A464fe9b9b79009A057e99' // AirdropHelper deployed
 
-// ENS Subdomain Registrar contract address (update after deployment)
-export const ENS_REGISTRAR_ADDRESS = '0x0000000000000000000000000000000000000000' // Update after deployment
+// ENS Subdomain Registrar contract address (not deployed yet - ENS not available on testnet)
+export const ENS_REGISTRAR_ADDRESS = '0x0000000000000000000000000000000000000000' // Deploy later when ENS is available
 
