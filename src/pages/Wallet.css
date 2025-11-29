@@ -1,77 +1,101 @@
+/* Wallet Page - Fully Responsive */
 .wallet-container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
+  width: 100%;
+  padding: 0 clamp(0.5rem, 2vw, 0);
 }
 
 .wallet-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 2rem;
+  margin-bottom: clamp(1.5rem, 4vw, 2rem);
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .wallet-header h1 {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 700;
+  color: var(--text-primary);
 }
 
 .network-badge {
   background: var(--bg-surface);
-  padding: 0.5rem 1rem;
+  padding: clamp(0.375rem, 1.5vw, 0.5rem) clamp(0.75rem, 2vw, 1rem);
   border-radius: 8px;
   border: 1px solid var(--border-subtle);
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   color: var(--text-muted);
   transition: all 0.2s;
+  white-space: nowrap;
 }
 
 .connect-prompt {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: clamp(2rem, 6vw, 4rem) clamp(1rem, 4vw, 2rem);
   background: var(--bg-surface);
   border-radius: 16px;
   border: 1px solid var(--border-subtle);
   transition: all 0.2s;
+  width: 100%;
+  max-width: 100%;
 }
 
 .connect-prompt h2 {
   margin-bottom: 1rem;
   color: var(--text-primary);
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
   transition: color 0.2s;
 }
 
 .connect-prompt p {
   color: var(--text-muted);
+  font-size: clamp(0.875rem, 2vw, 1rem);
   transition: color 0.2s;
 }
 
 .wallet-content {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: clamp(1.5rem, 4vw, 2rem);
+  width: 100%;
+}
+
+.wallet-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: clamp(1rem, 3vw, 1.5rem);
+  width: 100%;
 }
 
 .balance-card,
 .send-card,
 .history-card {
   background: var(--bg-surface);
-  padding: 2rem;
+  padding: clamp(1.5rem, 4vw, 2rem);
   border-radius: 16px;
   border: 1px solid var(--border-subtle);
   transition: all 0.2s;
+  width: 100%;
+  max-width: 100%;
 }
 
 .balance-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: clamp(1rem, 3vw, 1.5rem);
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .address-section {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: clamp(0.5rem, 1.5vw, 0.75rem);
+  flex-wrap: wrap;
 }
 
 .btn-ens-register {
@@ -81,12 +105,13 @@
   background: var(--bg-elevated);
   border: 1px solid var(--accent-primary);
   color: var(--accent-primary);
-  padding: 0.5rem 1rem;
+  padding: clamp(0.375rem, 1.5vw, 0.5rem) clamp(0.75rem, 2vw, 1rem);
   border-radius: 8px;
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   font-weight: 500;
   transition: all 0.2s;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .btn-ens-register:hover {
@@ -95,8 +120,9 @@
 }
 
 .balance-header h2 {
-  font-size: 1.5rem;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
   font-weight: 600;
+  color: var(--text-primary);
 }
 
 .address-display {
@@ -104,13 +130,16 @@
   align-items: center;
   gap: 0.5rem;
   background: var(--bg-elevated);
-  padding: 0.5rem 1rem;
+  padding: clamp(0.375rem, 1.5vw, 0.5rem) clamp(0.75rem, 2vw, 1rem);
   border-radius: 8px;
   border: 1px solid var(--border-subtle);
   color: var(--text-primary);
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   font-family: monospace;
   transition: all 0.2s;
+  word-break: break-all;
+  max-width: 100%;
+  overflow-wrap: break-word;
 }
 
 .address-display:hover {
@@ -121,7 +150,7 @@
 .balance-amount {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: clamp(1rem, 3vw, 1.5rem);
 }
 
 .token-balance,
@@ -132,7 +161,7 @@
 }
 
 .balance-label {
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -140,15 +169,17 @@
 }
 
 .balance-value {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 5vw, 2rem);
   font-weight: 700;
   color: var(--text-primary);
   font-family: monospace;
   transition: color 0.2s;
+  word-break: break-all;
+  overflow-wrap: break-word;
 }
 
 .balance-note {
-  font-size: 0.75rem;
+  font-size: clamp(0.625rem, 1.5vw, 0.75rem);
   color: var(--text-muted);
   margin-top: 0.25rem;
 }
@@ -158,8 +189,11 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  font-size: 1.5rem;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
   font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: clamp(1rem, 3vw, 1.5rem);
+  flex-wrap: wrap;
 }
 
 .history-header {
@@ -167,6 +201,8 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .spinner {
@@ -190,11 +226,11 @@
   padding: 0.75rem;
   margin-bottom: 1rem;
   color: var(--status-error);
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
 }
 
 .error-note {
-  font-size: 0.75rem;
+  font-size: clamp(0.625rem, 1.5vw, 0.75rem);
   margin-top: 0.25rem;
   opacity: 0.8;
 }
@@ -202,7 +238,7 @@
 .send-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: clamp(1rem, 3vw, 1.5rem);
 }
 
 .form-group {
@@ -210,10 +246,11 @@
   flex-direction: column;
   gap: 0.5rem;
   position: relative;
+  width: 100%;
 }
 
 .form-group label {
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   color: var(--text-muted);
   font-weight: 500;
 }
@@ -222,11 +259,14 @@
   background: var(--bg-app);
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
-  padding: 0.875rem 1rem;
+  padding: clamp(0.75rem, 2vw, 0.875rem) clamp(0.875rem, 2.5vw, 1rem);
   color: var(--text-primary);
-  font-size: 1rem;
+  font-size: clamp(0.875rem, 2vw, 1rem);
   transition: all 0.2s;
   font-family: monospace;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .input:focus {
@@ -238,14 +278,15 @@
 .max-button {
   position: absolute;
   right: 0.5rem;
-  top: 2.25rem;
+  top: calc(clamp(0.75rem, 2vw, 0.875rem) + 1.5rem);
   background: var(--bg-elevated);
   border: 1px solid var(--border-subtle);
   color: var(--text-primary);
-  padding: 0.25rem 0.75rem;
+  padding: clamp(0.25rem, 1vw, 0.375rem) clamp(0.5rem, 1.5vw, 0.75rem);
   border-radius: 6px;
-  font-size: 0.75rem;
+  font-size: clamp(0.625rem, 1.5vw, 0.75rem);
   transition: all 0.2s;
+  white-space: nowrap;
 }
 
 .max-button:hover {
@@ -255,8 +296,8 @@
 
 .btn-send {
   width: 100%;
-  padding: 1rem;
-  font-size: 1rem;
+  padding: clamp(0.875rem, 2vw, 1rem);
+  font-size: clamp(0.875rem, 2vw, 1rem);
   margin-top: 0.5rem;
 }
 
@@ -271,7 +312,8 @@
   color: var(--status-error);
   padding: 0.75rem;
   border-radius: 8px;
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+  word-break: break-word;
 }
 
 .tx-link {
@@ -281,23 +323,24 @@
   gap: 0.5rem;
   color: var(--accent-primary);
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   margin-top: 0.5rem;
   transition: color 0.2s;
+  word-break: break-all;
 }
 
 .tx-link:hover {
-  color: var(--accent-primary-dark);
+  color: var(--accent-primary-hover);
 }
 
 .empty-state {
   text-align: center;
-  padding: 3rem 2rem;
+  padding: clamp(2rem, 6vw, 3rem) clamp(1rem, 4vw, 2rem);
   color: var(--text-muted);
 }
 
 .empty-note {
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   margin-top: 0.5rem;
 }
 
@@ -305,17 +348,21 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 100%;
 }
 
 .transaction-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: clamp(0.75rem, 2vw, 1rem);
   background: var(--bg-app);
   border-radius: 8px;
   border: 1px solid var(--border-subtle);
   transition: all 0.2s;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  width: 100%;
 }
 
 .transaction-item:hover {
@@ -336,19 +383,22 @@
   flex-direction: column;
   gap: 0.25rem;
   flex: 1;
+  min-width: 0; /* Allow flex item to shrink */
 }
 
 .tx-type-row {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .tx-status-badge {
-  font-size: 0.75rem;
-  padding: 0.125rem 0.5rem;
+  font-size: clamp(0.625rem, 1.5vw, 0.75rem);
+  padding: clamp(0.125rem, 0.5vw, 0.25rem) clamp(0.375rem, 1.5vw, 0.5rem);
   border-radius: 4px;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .tx-status-badge.pending {
@@ -365,17 +415,20 @@
   font-weight: 600;
   color: var(--text-primary);
   transition: color 0.2s;
+  font-size: clamp(0.875rem, 2vw, 1rem);
 }
 
 .tx-address {
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   color: var(--text-muted);
   font-family: monospace;
   transition: color 0.2s;
+  word-break: break-all;
+  overflow-wrap: break-word;
 }
 
 .tx-time {
-  font-size: 0.75rem;
+  font-size: clamp(0.625rem, 1.5vw, 0.75rem);
   color: var(--text-muted);
   transition: color 0.2s;
 }
@@ -384,12 +437,14 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  flex-shrink: 0;
 }
 
 .tx-amount {
-  font-size: 1.125rem;
+  font-size: clamp(1rem, 2.5vw, 1.125rem);
   font-weight: 600;
   font-family: monospace;
+  white-space: nowrap;
 }
 
 .tx-amount.sent {
@@ -405,28 +460,90 @@
   transition: color 0.2s;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .tx-link-small:hover {
   color: var(--accent-primary);
 }
 
-@media (max-width: 768px) {
+/* Responsive breakpoints */
+@media (max-width: 480px) {
+  /* Small phones */
   .wallet-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .balance-value {
-    font-size: 1.5rem;
   }
 
   .transaction-item {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.75rem;
+  }
+
+  .tx-amount-section {
+    width: 100%;
+    justify-content: space-between;
   }
 }
 
+@media (min-width: 481px) and (max-width: 768px) {
+  /* Regular phones */
+  .wallet-actions {
+    grid-template-columns: 1fr;
+  }
+}
 
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: clamp(1rem, 3vw, 1.5rem);
+  padding-top: clamp(1rem, 3vw, 1.5rem);
+  border-top: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.pagination-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: clamp(0.5rem, 1.5vw, 0.625rem) clamp(0.75rem, 2vw, 1rem);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 44px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--border-hover);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.tx-status-badge.syncing {
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--status-warning);
+}
+
+@media (min-width: 1921px) {
+  /* Ultrawide and 4K */
+  .wallet-container {
+    max-width: 1200px;
+  }
+}

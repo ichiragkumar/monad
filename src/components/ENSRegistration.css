@@ -1,38 +1,46 @@
+/* ENS Registration - Fully Responsive */
 .ens-registration {
-  max-width: 500px;
+  max-width: min(95vw, 500px);
+  width: 100%;
 }
 
 .ens-content {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: clamp(1rem, 3vw, 1.5rem);
+  width: 100%;
 }
 
 .ens-description {
   color: var(--text-muted);
   line-height: 1.6;
+  font-size: clamp(0.875rem, 2vw, 1rem);
   transition: color 0.2s;
+  word-wrap: break-word;
 }
 
 .ens-preview {
-  padding: 1.5rem;
+  padding: clamp(1.25rem, 3vw, 1.5rem);
   background: var(--bg-app);
   border-radius: 12px;
   border: 1px solid var(--border-subtle);
   text-align: center;
   transition: all 0.2s;
+  width: 100%;
 }
 
 .ens-preview-label {
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   color: var(--text-muted);
   margin-bottom: 0.75rem;
   transition: color 0.2s;
 }
 
 .ens-preview-name {
-  font-size: 1.25rem;
+  font-size: clamp(1.125rem, 3vw, 1.25rem);
   font-weight: 600;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .ens-name {
@@ -50,47 +58,54 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .input-with-suffix .input {
   flex: 1;
+  min-width: min(100%, 200px);
+  font-size: clamp(0.875rem, 2vw, 1rem);
 }
 
 .input-suffix {
   color: var(--text-muted);
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   white-space: nowrap;
   transition: color 0.2s;
 }
 
 .input-hint {
-  font-size: 0.75rem;
+  font-size: clamp(0.625rem, 1.5vw, 0.75rem);
   color: var(--text-muted);
   margin-top: 0.25rem;
   transition: color 0.2s;
 }
 
 .ens-note {
-  padding: 1rem;
+  padding: clamp(0.75rem, 2vw, 1rem);
   background: var(--bg-elevated);
   border-radius: 8px;
   border: 1px solid var(--border-subtle);
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   color: var(--text-muted);
   transition: all 0.2s;
+  width: 100%;
 }
 
 .ens-note p {
   margin: 0.5rem 0;
+  word-wrap: break-word;
 }
 
 .ens-note ul {
   margin: 0.5rem 0;
-  padding-left: 1.5rem;
+  padding-left: clamp(1.25rem, 3vw, 1.5rem);
 }
 
 .ens-note li {
   margin: 0.25rem 0;
+  word-wrap: break-word;
 }
 
 .success-message {
@@ -98,11 +113,12 @@
   align-items: center;
   gap: 0.5rem;
   color: var(--status-success);
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   padding: 0.75rem;
-  background: rgba(16, 185, 129, 0.1);
+  background: rgba(15, 122, 69, 0.1);
   border: 1px solid var(--status-success);
   border-radius: 8px;
+  flex-wrap: wrap;
 }
 
 .error-message {
@@ -110,10 +126,31 @@
   align-items: center;
   gap: 0.5rem;
   color: var(--status-error);
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   padding: 0.75rem;
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid var(--status-error);
   border-radius: 8px;
+  flex-wrap: wrap;
+  word-wrap: break-word;
 }
 
+/* Responsive breakpoints */
+@media (max-width: 480px) {
+  /* Small phones */
+  .input-with-suffix {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .input-with-suffix .input {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1921px) {
+  /* Ultrawide and 4K */
+  .ens-registration {
+    max-width: 600px;
+  }
+}

@@ -8,6 +8,8 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 body {
@@ -21,6 +23,8 @@ body {
   min-height: 100vh;
   transition: background-color 0.2s, color 0.2s;
   overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 
 code {
@@ -31,10 +35,63 @@ code {
 button {
   cursor: pointer;
   font-family: inherit;
+  min-height: 44px; /* Touch-friendly minimum */
 }
 
-input, textarea {
+input,
+textarea {
   font-family: inherit;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
+/* Prevent horizontal scroll */
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  max-width: 100%;
+  height: auto;
+}
 
+/* Responsive typography base */
+h1 {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+}
+
+h4 {
+  font-size: clamp(1.125rem, 2.5vw, 1.25rem);
+}
+
+p {
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  line-height: 1.6;
+}
+
+/* Responsive breakpoints for base styles */
+@media (max-width: 480px) {
+  /* Small phones */
+  body {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 1921px) {
+  /* Ultrawide and 4K */
+  body {
+    font-size: 18px;
+  }
+}

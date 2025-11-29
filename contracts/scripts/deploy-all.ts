@@ -37,22 +37,40 @@ async function main() {
     contracts.XToken = xTokenAddress;
     console.log("   ✓ XToken deployed to:", xTokenAddress);
 
-    // 2. Deploy AirdropHelper
-    console.log("\n2. Deploying AirdropHelper...");
-    const AirdropHelper = await ethers.getContractFactory("AirdropHelper");
-    const airdropHelper = await AirdropHelper.deploy();
-    await airdropHelper.waitForDeployment();
-    const airdropHelperAddress = await airdropHelper.getAddress();
-    contracts.AirdropHelper = airdropHelperAddress;
-    console.log("   ✓ AirdropHelper deployed to:", airdropHelperAddress);
+        // 2. Deploy AirdropHelper
+        console.log("\n2. Deploying AirdropHelper...");
+        const AirdropHelper = await ethers.getContractFactory("AirdropHelper");
+        const airdropHelper = await AirdropHelper.deploy();
+        await airdropHelper.waitForDeployment();
+        const airdropHelperAddress = await airdropHelper.getAddress();
+        contracts.AirdropHelper = airdropHelperAddress;
+        console.log("   ✓ AirdropHelper deployed to:", airdropHelperAddress);
 
-    // 3. Deploy ENSSubdomainRegistrar (if ENS registry address is provided)
+        // 3. Deploy RewardLinkExecutor
+        console.log("\n3. Deploying RewardLinkExecutor...");
+        const RewardLinkExecutor = await ethers.getContractFactory("RewardLinkExecutor");
+        const rewardLinkExecutor = await RewardLinkExecutor.deploy();
+        await rewardLinkExecutor.waitForDeployment();
+        const rewardLinkExecutorAddress = await rewardLinkExecutor.getAddress();
+        contracts.RewardLinkExecutor = rewardLinkExecutorAddress;
+        console.log("   ✓ RewardLinkExecutor deployed to:", rewardLinkExecutorAddress);
+
+        // 4. Deploy SubscriptionScheduler
+        console.log("\n4. Deploying SubscriptionScheduler...");
+        const SubscriptionScheduler = await ethers.getContractFactory("SubscriptionScheduler");
+        const subscriptionScheduler = await SubscriptionScheduler.deploy(deployer.address);
+        await subscriptionScheduler.waitForDeployment();
+        const subscriptionSchedulerAddress = await subscriptionScheduler.getAddress();
+        contracts.SubscriptionScheduler = subscriptionSchedulerAddress;
+        console.log("   ✓ SubscriptionScheduler deployed to:", subscriptionSchedulerAddress);
+
+        // 5. Deploy ENSSubdomainRegistrar (if ENS registry address is provided)
     const ensRegistryAddress = process.env.ENS_REGISTRY_ADDRESS;
     const ensResolverAddress = process.env.ENS_RESOLVER_ADDRESS;
     const parentNode = process.env.ENS_PARENT_NODE; // bytes32 hex string
 
-    if (ensRegistryAddress && ensResolverAddress && parentNode) {
-      console.log("\n3. Deploying ENSSubdomainRegistrar...");
+        if (ensRegistryAddress && ensResolverAddress && parentNode) {
+          console.log("\n5. Deploying ENSSubdomainRegistrar...");
       try {
         // Ensure addresses are valid hex (not ENS names) to avoid resolution errors
         const registryAddr = ethers.getAddress(ensRegistryAddress);
@@ -74,8 +92,8 @@ async function main() {
         console.log("   This is expected if ENS is not available on this network");
         console.log("   You can deploy it later when ENS infrastructure is available");
       }
-    } else {
-      console.log("\n3. Skipping ENSSubdomainRegistrar (missing env variables)");
+        } else {
+          console.log("\n5. Skipping ENSSubdomainRegistrar (missing env variables)");
       console.log("   Set ENS_REGISTRY_ADDRESS, ENS_RESOLVER_ADDRESS, and ENS_PARENT_NODE to deploy");
       console.log("   Note: ENS may not be available on Monad testnet yet");
     }

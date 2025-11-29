@@ -1,27 +1,32 @@
+/* Faucet Component - Fully Responsive */
 .faucet-card {
   background: var(--bg-surface);
-  padding: 1.5rem;
+  padding: clamp(1.25rem, 3vw, 1.5rem);
   border-radius: 12px;
   border: 1px solid var(--border-subtle);
   margin-top: 1rem;
   transition: all 0.2s;
+  width: 100%;
+  max-width: 100%;
 }
 
 .faucet-header {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: clamp(0.5rem, 1.5vw, 0.75rem);
   margin-bottom: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .faucet-icon {
-  width: 24px;
-  height: 24px;
+  width: clamp(20px, 4vw, 24px);
+  height: clamp(20px, 4vw, 24px);
   color: var(--accent-primary);
+  flex-shrink: 0;
 }
 
 .faucet-header h3 {
-  font-size: 1.125rem;
+  font-size: clamp(1rem, 2.5vw, 1.125rem);
   font-weight: 600;
   color: var(--text-primary);
   transition: color 0.2s;
@@ -29,10 +34,11 @@
 
 .faucet-description {
   color: var(--text-muted);
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   margin-bottom: 1rem;
   line-height: 1.5;
   transition: color 0.2s;
+  word-wrap: break-word;
 }
 
 .btn-faucet {
@@ -43,13 +49,18 @@
   gap: 0.5rem;
   background: var(--accent-primary);
   color: var(--text-inverted);
-  padding: 0.875rem 1.5rem;
+  padding: clamp(0.75rem, 2vw, 0.875rem) clamp(1.25rem, 3vw, 1.5rem);
   border-radius: 8px;
   font-weight: 600;
   transition: all 0.2s;
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  min-height: 44px; /* Touch-friendly */
+  border: none;
+  cursor: pointer;
 }
 
 .btn-faucet:hover:not(:disabled) {
+  background: var(--accent-primary-hover);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px var(--shadow-medium);
 }
@@ -57,6 +68,7 @@
 .btn-faucet:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
 .faucet-error {
@@ -66,7 +78,8 @@
   border: 1px solid var(--status-error);
   border-radius: 8px;
   color: var(--status-error);
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+  word-wrap: break-word;
 }
 
 .faucet-tx-link {
@@ -75,12 +88,20 @@
   text-align: center;
   color: var(--accent-primary);
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   transition: color 0.2s;
+  word-break: break-all;
+  overflow-wrap: break-word;
 }
 
 .faucet-tx-link:hover {
-  color: var(--accent-primary-dark);
+  color: var(--accent-primary-hover);
 }
 
-
+/* Responsive breakpoints */
+@media (max-width: 480px) {
+  /* Small phones */
+  .faucet-card {
+    padding: 1rem;
+  }
+}

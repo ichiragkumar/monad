@@ -1,0 +1,300 @@
+/* Subscription Manager - Fully Responsive */
+.subscription-manager {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 4vw, 2rem);
+  width: 100%;
+}
+
+.subscription-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.subscription-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.connect-prompt {
+  text-align: center;
+  padding: clamp(2rem, 5vw, 3rem);
+  background: var(--bg-surface);
+  border-radius: 16px;
+  border: 1px solid var(--border-subtle);
+}
+
+.connect-prompt p {
+  color: var(--text-muted);
+  font-size: clamp(0.875rem, 2vw, 1rem);
+}
+
+.create-subscription-form {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: clamp(1.5rem, 4vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 3vw, 1.5rem);
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.create-subscription-form h3 {
+  font-size: clamp(1.125rem, 3vw, 1.25rem);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.form-group .input {
+  padding: clamp(0.75rem, 2vw, 0.875rem) clamp(0.875rem, 2.5vw, 1rem);
+  font-size: clamp(0.875rem, 2vw, 1rem);
+}
+
+.form-actions {
+  display: flex;
+  gap: clamp(0.75rem, 2vw, 1rem);
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.form-actions .btn {
+  flex: 1;
+  min-width: min(100%, 150px);
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  padding: clamp(0.75rem, 2vw, 0.875rem) clamp(1.25rem, 3vw, 1.5rem);
+}
+
+.success-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--status-success);
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  padding: 0.75rem;
+  background: rgba(15, 122, 69, 0.1);
+  border: 1px solid var(--status-success);
+  border-radius: 8px;
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--status-error);
+  color: var(--status-error);
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+  word-wrap: break-word;
+}
+
+.subscriptions-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 3vw, 1.5rem);
+}
+
+.subscriptions-list h3 {
+  font-size: clamp(1.125rem, 3vw, 1.25rem);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.empty-state {
+  text-align: center;
+  padding: clamp(2rem, 5vw, 3rem);
+  background: var(--bg-surface);
+  border-radius: 16px;
+  border: 1px solid var(--border-subtle);
+}
+
+.empty-state p {
+  color: var(--text-muted);
+  font-size: clamp(0.875rem, 2vw, 1rem);
+}
+
+.subscriptions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 350px), 1fr));
+  gap: clamp(1rem, 3vw, 1.5rem);
+}
+
+.subscription-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: clamp(1.25rem, 3vw, 1.5rem);
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 3vw, 1.25rem);
+}
+
+.subscription-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 4px 16px var(--shadow-medium);
+}
+
+.subscription-card.paused {
+  opacity: 0.7;
+}
+
+.subscription-card.due {
+  border-color: var(--status-warning);
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.subscription-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.subscription-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.subscription-info h4 {
+  font-size: clamp(1rem, 2.5vw, 1.125rem);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.status-badge {
+  padding: clamp(0.25rem, 0.75vw, 0.375rem) clamp(0.5rem, 1.5vw, 0.75rem);
+  border-radius: 6px;
+  font-size: clamp(0.625rem, 1.5vw, 0.75rem);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status-badge.active {
+  background: rgba(15, 122, 69, 0.1);
+  color: var(--status-success);
+}
+
+.status-badge.paused {
+  background: rgba(107, 114, 128, 0.1);
+  color: var(--text-muted);
+}
+
+.subscription-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.detail-item .label {
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+  color: var(--text-muted);
+}
+
+.detail-item .value {
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.detail-item .value.amount {
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.detail-item .value.due {
+  color: var(--status-warning);
+  font-weight: 600;
+}
+
+.subscription-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn-sm {
+  padding: clamp(0.5rem, 1.5vw, 0.625rem) clamp(0.75rem, 2vw, 1rem);
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+  min-height: 36px;
+}
+
+.btn-danger {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--status-error);
+  color: var(--status-error);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: var(--status-error);
+  color: var(--text-inverted);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive breakpoints */
+@media (max-width: 480px) {
+  .subscriptions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .subscription-actions {
+    flex-direction: column;
+  }
+
+  .subscription-actions .btn {
+    width: 100%;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+  }
+}
+

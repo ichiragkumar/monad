@@ -141,7 +141,7 @@ export default function Home() {
             <div className="roadmap-marker"></div>
             <div className="roadmap-content">
               <div className="roadmap-date">Q4 2024</div>
-              <h3>Mobile App</h3>
+              <h3>Mini App</h3>
               <p>Native iOS and Android applications</p>
             </div>
           </div>

@@ -43,22 +43,28 @@ export default function Layout({ children }: LayoutProps) {
                 Roadmap
               </a>
             </nav>
-          ) : (
-            <nav className="nav">
-              <Link
-                to="/wallet"
-                className={location.pathname === '/wallet' ? 'active' : ''}
-              >
-                Wallet
-              </Link>
-              <Link
-                to="/vendor"
-                className={location.pathname === '/vendor' ? 'active' : ''}
-              >
-                Vendor Dashboard
-              </Link>
-            </nav>
-          )}
+              ) : (
+                <nav className="nav">
+                  <Link
+                    to="/wallet"
+                    className={location.pathname === '/wallet' ? 'active' : ''}
+                  >
+                    Wallet
+                  </Link>
+                  <Link
+                    to="/vendor"
+                    className={location.pathname === '/vendor' ? 'active' : ''}
+                  >
+                    Vendor Dashboard
+                  </Link>
+                  <Link
+                    to="/analytics"
+                    className={location.pathname === '/analytics' ? 'active' : ''}
+                  >
+                    Analytics
+                  </Link>
+                </nav>
+              )}
           <div className="wallet-connect">
             <ThemeToggle />
             <ConnectButton />

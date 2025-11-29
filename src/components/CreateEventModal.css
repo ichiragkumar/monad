@@ -1,16 +1,20 @@
+/* Create Event Modal - Fully Responsive */
 .create-event-modal {
-  max-width: 600px;
+  max-width: min(95vw, 600px);
+  width: 100%;
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: clamp(1rem, 3vw, 1.5rem);
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .modal-header h2 {
-  font-size: 1.5rem;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
   font-weight: 600;
   color: var(--text-primary);
   transition: color 0.2s;
@@ -27,6 +31,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  min-width: 44px; /* Touch-friendly */
+  min-height: 44px;
 }
 
 .modal-close:hover {
@@ -37,43 +44,93 @@
 .create-event-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: clamp(1rem, 3vw, 1.5rem);
+  width: 100%;
 }
 
 .form-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: clamp(0.75rem, 2vw, 1rem);
+  width: 100%;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.form-group label {
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.input,
+.textarea {
+  background: var(--bg-app);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: clamp(0.75rem, 2vw, 0.875rem) clamp(0.875rem, 2.5vw, 1rem);
+  color: var(--text-primary);
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  transition: all 0.2s;
+  font-family: inherit;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--border-hover);
+  background: var(--bg-surface);
 }
 
 .textarea {
   resize: vertical;
-  min-height: 100px;
+  min-height: clamp(80px, 15vw, 100px);
   font-family: inherit;
 }
 
 .modal-actions {
   display: flex;
-  gap: 1rem;
+  gap: clamp(0.75rem, 2vw, 1rem);
   justify-content: flex-end;
   margin-top: 1rem;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
-.btn-secondary {
-  background: var(--bg-elevated);
-  color: var(--text-primary);
-  border: 1px solid var(--border-subtle);
-  transition: all 0.2s;
+.modal-actions .btn {
+  flex: 1;
+  min-width: min(100%, 120px);
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  padding: clamp(0.75rem, 2vw, 0.875rem) clamp(1.25rem, 3vw, 1.5rem);
 }
 
-.btn-secondary:hover {
-  background: var(--bg-hover);
-  border-color: var(--border-strong);
-}
-
-@media (max-width: 768px) {
+/* Responsive breakpoints */
+@media (max-width: 480px) {
+  /* Small phones */
   .form-row {
     grid-template-columns: 1fr;
   }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+  }
 }
 
+@media (min-width: 1921px) {
+  /* Ultrawide and 4K */
+  .create-event-modal {
+    max-width: 700px;
+  }
+}

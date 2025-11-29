@@ -3,8 +3,10 @@
   "chainId": "10143",
   "deployer": "0xFd6F109a1c1AdC68567F0c1066531738b5be8D11",
   "contracts": {
-    "XToken": "0x151310CEAC3686C08c83E423a7E5Bf4EC04b3bD3",
-    "AirdropHelper": "0x41155e50E49a189De6A464fe9b9b79009A057e99"
+    "XToken": "0xf076E53383868809E8edb21c8DF4fE2F5b58daB2",
+    "AirdropHelper": "0xB477629258566cB79CE0033DA883737953cA7E8c",
+    "RewardLinkExecutor": "0x8C4d6757aBbe89A451488D78219F574CD518c949",
+    "SubscriptionScheduler": "0xE119fC309692Fa06f81Fe324b63df6Af32fd394D"
   },
-  "timestamp": "2025-11-29T07:33:08.088Z"
+  "timestamp": "2025-11-29T10:31:00.299Z"
 }

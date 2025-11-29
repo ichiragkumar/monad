@@ -81,11 +81,17 @@ export const config = createConfig({
 })
 
 // Token contract address (deployed on Monad testnet - Latest Deployment)
-export const TOKEN_CONTRACT_ADDRESS = '0x151310CEAC3686C08c83E423a7E5Bf4EC04b3bD3' // XToken deployed
+export const TOKEN_CONTRACT_ADDRESS = '0xf076E53383868809E8edb21c8DF4fE2F5b58daB2' as `0x${string}` // XToken deployed
 
 // AirdropHelper contract address (deployed on Monad testnet - Latest Deployment)
-export const AIRDROP_HELPER_ADDRESS = '0x41155e50E49a189De6A464fe9b9b79009A057e99' // AirdropHelper deployed
+export const AIRDROP_HELPER_ADDRESS = '0xB477629258566cB79CE0033DA883737953cA7E8c' as `0x${string}` // AirdropHelper deployed
 
 // ENS Subdomain Registrar contract address (not deployed yet - ENS not available on testnet)
-export const ENS_REGISTRAR_ADDRESS = '0x0000000000000000000000000000000000000000' // Deploy later when ENS is available
+export const ENS_REGISTRAR_ADDRESS = '0x0000000000000000000000000000000000000000' as `0x${string}` // Deploy later when ENS is available
+
+// RewardLinkExecutor contract address (deployed on Monad testnet)
+export const REWARD_LINK_EXECUTOR_ADDRESS = '0x8C4d6757aBbe89A451488D78219F574CD518c949' as `0x${string}` // RewardLinkExecutor deployed
+
+// SubscriptionScheduler contract address (deployed on Monad testnet)
+export const SUBSCRIPTION_SCHEDULER_ADDRESS = '0xE119fC309692Fa06f81Fe324b63df6Af32fd394D' as `0x${string}` // SubscriptionScheduler deployed
 

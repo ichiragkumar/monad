@@ -1,9 +1,10 @@
+/* Theme Toggle - Fully Responsive */
 .theme-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: clamp(36px, 8vw, 40px);
+  height: clamp(36px, 8vw, 40px);
   background: var(--bg-elevated);
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
@@ -11,16 +12,23 @@
   cursor: pointer;
   transition: all 0.2s;
   padding: 0;
+  flex-shrink: 0;
+  min-width: 44px; /* Touch-friendly */
+  min-height: 44px;
 }
 
 .theme-toggle:hover {
   background: var(--bg-hover);
   border-color: var(--border-hover);
-  color: var(--accent-primary);
+  color: var(--accent-primary-hover);
 }
 
 .theme-toggle:focus {
   outline: none;
-  border-color: var(--border-hover);
+  border-color: var(--border-focus);
 }
 
+.theme-toggle svg {
+  width: clamp(18px, 4vw, 20px);
+  height: clamp(18px, 4vw, 20px);
+}
