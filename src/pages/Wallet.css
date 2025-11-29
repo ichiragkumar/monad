@@ -1,0 +1,323 @@
+.wallet-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.wallet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.wallet-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.network-badge {
+  background: var(--surface);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.connect-prompt {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--surface);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+
+.connect-prompt h2 {
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+.connect-prompt p {
+  color: var(--text-muted);
+}
+
+.wallet-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.balance-card,
+.send-card,
+.history-card {
+  background: var(--surface);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+
+.balance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.address-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-ens-register {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--surface-light);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.btn-ens-register:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.balance-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.address-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--surface-light);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.875rem;
+  font-family: monospace;
+  transition: all 0.2s;
+}
+
+.address-display:hover {
+  background: var(--border);
+  border-color: var(--primary);
+}
+
+.balance-amount {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.token-balance,
+.native-balance {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.balance-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.balance-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text);
+  font-family: monospace;
+}
+
+.balance-note {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.send-card h2,
+.history-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.send-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.input {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.875rem 1rem;
+  color: var(--text);
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  font-family: monospace;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.max-button {
+  position: absolute;
+  right: 0.5rem;
+  top: 2.25rem;
+  background: var(--surface-light);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+}
+
+.max-button:hover {
+  background: var(--border);
+  border-color: var(--primary);
+}
+
+.btn-send {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--error);
+  color: var(--error);
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
+
+.tx-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  transition: color 0.2s;
+}
+
+.tx-link:hover {
+  color: var(--primary-dark);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--text-muted);
+}
+
+.empty-note {
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.transaction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: var(--background);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.tx-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.tx-type {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.tx-address {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+.tx-time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.tx-amount {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--primary);
+  font-family: monospace;
+}
+
+@media (max-width: 768px) {
+  .wallet-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .balance-value {
+    font-size: 1.5rem;
+  }
+
+  .transaction-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+}
+
+

@@ -1,0 +1,112 @@
+.ens-registration {
+  max-width: 500px;
+}
+
+.ens-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ens-description {
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.ens-preview {
+  padding: 1.5rem;
+  background: var(--background);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.ens-preview-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.ens-preview-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.ens-name {
+  color: var(--primary);
+  font-family: monospace;
+}
+
+.ens-placeholder {
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+.input-with-suffix {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.input-with-suffix .input {
+  flex: 1;
+}
+
+.input-suffix {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.input-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.ens-note {
+  padding: 1rem;
+  background: var(--surface-light);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.ens-note p {
+  margin: 0.5rem 0;
+}
+
+.ens-note ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.ens-note li {
+  margin: 0.25rem 0;
+}
+
+.success-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--success);
+  font-size: 0.875rem;
+  padding: 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid var(--success);
+  border-radius: 8px;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--error);
+  font-size: 0.875rem;
+  padding: 0.75rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--error);
+  border-radius: 8px;
+}
+

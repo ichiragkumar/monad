@@ -1,0 +1,48 @@
+import { Link, useLocation } from 'react-router-dom'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { Wallet } from 'lucide-react'
+import './Layout.css'
+
+interface LayoutProps {
+  children: React.ReactNode
+}
+
+export default function Layout({ children }: LayoutProps) {
+  const location = useLocation()
+
+  return (
+    <div className="layout">
+      <header className="header">
+        <div className="header-content">
+          <Link to="/" className="logo">
+            <Wallet className="logo-icon" />
+            <span>MonadPay</span>
+          </Link>
+          <nav className="nav">
+            <Link
+              to="/wallet"
+              className={location.pathname === '/wallet' ? 'active' : ''}
+            >
+              Wallet
+            </Link>
+            <Link
+              to="/vendor"
+              className={location.pathname === '/vendor' ? 'active' : ''}
+            >
+              Vendor Dashboard
+            </Link>
+          </nav>
+          <div className="wallet-connect">
+            <ConnectButton />
+          </div>
+        </div>
+      </header>
+      <main className="main-content">{children}</main>
+      <footer className="footer">
+        <p>Built on Monad • Fast, Low-Cost Micropayments</p>
+      </footer>
+    </div>
+  )
+}
+
+
