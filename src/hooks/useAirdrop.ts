@@ -1,7 +1,7 @@
-import { useWriteContract, useWaitForTransactionReceipt, useReadContract } from 'wagmi'
+import { useWriteContract, useWaitForTransactionReceipt, useReadContract, useAccount } from 'wagmi'
 import { parseEther } from 'ethers'
 import { erc20Abi } from 'viem'
-import { TOKEN_CONTRACT_ADDRESS } from '@/config/wagmi'
+import { TOKEN_CONTRACT_ADDRESS, AIRDROP_HELPER_ADDRESS } from '@/config/wagmi'
 
 // AirdropHelper contract ABI
 const airdropHelperAbi = [

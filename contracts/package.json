@@ -4,11 +4,14 @@
   "scripts": {
     "compile": "hardhat compile",
     "test": "hardhat test",
-    "deploy": "hardhat run scripts/deploy.ts"
+    "deploy": "hardhat run scripts/deploy.ts --network monadTestnet",
+    "deploy-all": "hardhat run scripts/deploy-all.ts --network monadTestnet",
+    "verify": "hardhat verify --network monadTestnet"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
     "@openzeppelin/contracts": "^5.0.0",
+    "dotenv": "^16.3.1",
     "hardhat": "^2.19.0",
     "typescript": "^5.2.2"
   }

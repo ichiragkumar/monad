@@ -1,29 +1,24 @@
 import { useState, useEffect } from 'react'
 import { useAccount, useBalance, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { parseEther, formatEther, formatUnits } from 'ethers'
-import { Send, History, Copy, Check, ExternalLink, User } from 'lucide-react'
+import { Send, History, Copy, Check, ExternalLink, User, Loader2 } from 'lucide-react'
 import { TOKEN_CONTRACT_ADDRESS } from '@/config/wagmi'
 import { erc20Abi } from 'viem'
 import Faucet from '@/components/Faucet'
 import ENSRegistration from '@/components/ENSRegistration'
+import { useTransactionHistory } from '@/hooks/useTransactionHistory'
 import './Wallet.css'
-
-interface Transaction {
-  hash: string
-  from: string
-  to: string
-  value: string
-  timestamp: number
-}
 
 export default function Wallet() {
   const { address, isConnected, chain } = useAccount()
   const [recipient, setRecipient] = useState('')
   const [amount, setAmount] = useState('')
-  const [transactions, setTransactions] = useState<Transaction[]>([])
   const [copied, setCopied] = useState(false)
   const [ensName, setEnsName] = useState<string | null>(null)
   const [showENSRegistration, setShowENSRegistration] = useState(false)
+
+  // Use transaction history hook
+  const { transactions, isLoading: isLoadingHistory, error: historyError } = useTransactionHistory()
 
   // Load ENS name from localStorage (in production, fetch from ENS resolver)
   useEffect(() => {
@@ -251,29 +246,48 @@ export default function Wallet() {
 
         {/* Transaction History */}
         <div className="history-card">
-          <h2>
-            <History size={24} />
-            Recent Transactions
-          </h2>
-          {transactions.length === 0 ? (
+          <div className="history-header">
+            <h2>
+              <History size={24} />
+              Recent Transactions
+            </h2>
+            {isLoadingHistory && (
+              <Loader2 size={20} className="spinner" />
+            )}
+          </div>
+          
+          {historyError && (
+            <div className="history-error">
+              <p>Error loading transactions: {historyError}</p>
+              <p className="error-note">Showing cached transactions if available</p>
+            </div>
+          )}
+
+          {!isLoadingHistory && transactions.length === 0 ? (
             <div className="empty-state">
               <p>No transactions yet</p>
               <p className="empty-note">
-                Your transaction history will appear here
+                Your transaction history will appear here once you make your first transfer
               </p>
             </div>
           ) : (
             <div className="transaction-list">
               {transactions.map((tx) => (
-                <div key={tx.hash} className="transaction-item">
+                <div key={tx.hash} className={`transaction-item ${tx.status}`}>
                   <div className="tx-info">
-                    <div className="tx-type">
-                      {tx.from.toLowerCase() === address?.toLowerCase() 
-                        ? 'Sent' 
-                        : 'Received'}
+                    <div className="tx-type-row">
+                      <div className={`tx-type ${tx.type}`}>
+                        {tx.type === 'sent' ? 'Sent' : 'Received'}
+                      </div>
+                      {tx.status === 'pending' && (
+                        <span className="tx-status-badge pending">Pending</span>
+                      )}
+                      {tx.status === 'failed' && (
+                        <span className="tx-status-badge failed">Failed</span>
+                      )}
                     </div>
                     <div className="tx-address">
-                      {tx.from.toLowerCase() === address?.toLowerCase() 
+                      {tx.type === 'sent'
                         ? `To: ${formatAddress(tx.to)}`
                         : `From: ${formatAddress(tx.from)}`}
                     </div>
@@ -281,8 +295,21 @@ export default function Wallet() {
                       {new Date(tx.timestamp * 1000).toLocaleString()}
                     </div>
                   </div>
-                  <div className="tx-amount">
-                    {formatEther(tx.value)} X Token
+                  <div className="tx-amount-section">
+                    <div className={`tx-amount ${tx.type}`}>
+                      {tx.type === 'sent' ? '-' : '+'} {tx.value} XTK
+                    </div>
+                    {chain?.blockExplorers?.default && (
+                      <a
+                        href={`${chain.blockExplorers.default.url}/tx/${tx.hash}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="tx-link-small"
+                        title="View on explorer"
+                      >
+                        <ExternalLink size={14} />
+                      </a>
+                    )}
                   </div>
                 </div>
               ))}

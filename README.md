@@ -4,25 +4,27 @@ A web-based platform for micropayments, peer-to-peer transfers, and loyalty rewa
 
 ## Features
 
-### Phase 1: Core Wallet & Micropayments (Current)
+### Phase 1: Core Wallet & Micropayments ✅
 - ✅ Wallet connection (MetaMask, WalletConnect)
 - ✅ Token balance display
 - ✅ Send tokens (P2P micropayments)
-- ✅ Transaction history
+- ✅ Transaction history (blockchain-fetched)
 - ✅ Monad testnet integration
+- ✅ Error boundary and loading states
 
-### Phase 2: Loyalty & Rewards (Planned)
-- Vendor dashboard
-- Event/program creation
-- Participant whitelisting
-- Bulk token distribution
-- Pre-event airdrops
-- Post-event rewards
+### Phase 2: Loyalty & Rewards ✅
+- ✅ Vendor dashboard with statistics
+- ✅ Event/program creation
+- ✅ Participant whitelisting (individual + CSV import)
+- ✅ Bulk token distribution (equal & variable amounts)
+- ✅ Smart contract integration (AirdropHelper)
+- ✅ Approval flow and transaction tracking
 
-### Phase 3: ENS Integration (Planned)
-- ENS subdomain assignment
-- Human-readable usernames
-- ENS name resolution in UI
+### Phase 3: ENS Integration ✅
+- ✅ ENS subdomain assignment
+- ✅ Human-readable usernames
+- ✅ ENS registration UI
+- ✅ ENS subdomain registrar contract
 
 ### Phase 4: Mainnet Launch (Planned)
 - Security audits
@@ -86,12 +88,23 @@ MONAD_TESTNET_RPC=https://testnet-rpc.monad.xyz
 npm run compile
 ```
 
-5. Deploy to Monad testnet:
+5. Deploy all contracts to Monad testnet:
 ```bash
 npm run deploy
 ```
 
-6. Update the `TOKEN_CONTRACT_ADDRESS` in `src/config/wagmi.ts` with the deployed contract address.
+   Or deploy individually:
+```bash
+npx hardhat run scripts/deploy.ts --network monadTestnet
+npx hardhat run scripts/deploy-all.ts --network monadTestnet
+```
+
+6. Update contract addresses in `src/config/wagmi.ts`:
+   - `TOKEN_CONTRACT_ADDRESS`
+   - `AIRDROP_HELPER_ADDRESS`
+   - `ENS_REGISTRAR_ADDRESS` (if deployed)
+
+   Deployment addresses are saved in `contracts/deployments/{network}.json`
 
 ## Project Structure
 
