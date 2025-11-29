@@ -12,7 +12,8 @@
 .modal-header h2 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--text);
+  color: var(--text-primary);
+  transition: color 0.2s;
 }
 
 .modal-close {
@@ -29,8 +30,8 @@
 }
 
 .modal-close:hover {
-  background: var(--surface-light);
-  color: var(--text);
+  background: var(--bg-hover);
+  color: var(--text-primary);
 }
 
 .create-event-form {
@@ -59,13 +60,15 @@
 }
 
 .btn-secondary {
-  background: var(--surface-light);
-  color: var(--text);
-  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  transition: all 0.2s;
 }
 
 .btn-secondary:hover {
-  background: var(--border);
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
 }
 
 @media (max-width: 768px) {

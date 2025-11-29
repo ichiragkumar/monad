@@ -17,9 +17,10 @@
 .distribution-type-selector {
   display: flex;
   gap: 0.5rem;
-  background: var(--background);
+  background: var(--bg-app);
   padding: 0.25rem;
   border-radius: 8px;
+  transition: background-color 0.2s;
 }
 
 .type-button {
@@ -35,9 +36,9 @@
 }
 
 .type-button.active {
-  background: var(--surface);
-  color: var(--text);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  box-shadow: 0 2px 4px var(--shadow-soft);
 }
 
 .equal-distribution,
@@ -54,8 +55,9 @@
   max-height: 300px;
   overflow-y: auto;
   padding: 0.5rem;
-  background: var(--background);
+  background: var(--bg-app);
   border-radius: 8px;
+  transition: background-color 0.2s;
 }
 
 .participant-amount-row {
@@ -63,16 +65,18 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: var(--surface);
+  background: var(--bg-surface);
   border-radius: 6px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-subtle);
+  transition: all 0.2s;
 }
 
 .participant-address {
   flex: 1;
   font-family: monospace;
   font-size: 0.875rem;
-  color: var(--text);
+  color: var(--text-primary);
+  transition: color 0.2s;
 }
 
 .amount-input {
@@ -84,41 +88,46 @@
   color: var(--text-muted);
   font-size: 0.875rem;
   min-width: 40px;
+  transition: color 0.2s;
 }
 
 .distribution-summary {
   padding: 1rem;
-  background: var(--surface-light);
+  background: var(--bg-elevated);
   border-radius: 8px;
   text-align: center;
+  transition: background-color 0.2s;
 }
 
 .distribution-summary p {
-  color: var(--text);
+  color: var(--text-primary);
   margin: 0;
+  transition: color 0.2s;
 }
 
 .distribution-summary strong {
-  color: var(--primary);
+  color: var(--accent-primary);
 }
 
 .balance-check {
   padding: 1rem;
-  background: var(--background);
+  background: var(--bg-app);
   border-radius: 8px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-subtle);
+  transition: all 0.2s;
 }
 
 .balance-check p {
   margin: 0 0 0.5rem 0;
-  color: var(--text);
+  color: var(--text-primary);
+  transition: color 0.2s;
 }
 
 .balance-warning {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--error);
+  color: var(--status-error);
   font-size: 0.875rem;
   margin-top: 0.5rem;
 }
@@ -127,7 +136,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--warning);
+  color: var(--status-warning);
   font-size: 0.875rem;
   margin-top: 0.5rem;
 }
@@ -136,11 +145,11 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--success);
+  color: var(--status-success);
   font-size: 0.875rem;
   padding: 0.75rem;
   background: rgba(16, 185, 129, 0.1);
-  border: 1px solid var(--success);
+  border: 1px solid var(--status-success);
   border-radius: 8px;
   margin-top: 1rem;
 }
@@ -151,21 +160,21 @@
 }
 
 .tx-link {
-  color: var(--primary);
+  color: var(--accent-primary);
   text-decoration: none;
   font-size: 0.875rem;
   transition: color 0.2s;
 }
 
 .tx-link:hover {
-  color: var(--primary-dark);
+  color: var(--accent-primary-dark);
   text-decoration: underline;
 }
 
 .error-message {
   background: rgba(239, 68, 68, 0.1);
-  border: 1px solid var(--error);
-  color: var(--error);
+  border: 1px solid var(--status-error);
+  color: var(--status-error);
   padding: 0.75rem;
   border-radius: 8px;
   font-size: 0.875rem;

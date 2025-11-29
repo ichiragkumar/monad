@@ -4,52 +4,58 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: var(--background);
+  background: var(--bg-app);
+  transition: background-color 0.2s;
 }
 
 .error-boundary-content {
   max-width: 500px;
   text-align: center;
-  background: var(--surface);
+  background: var(--bg-surface);
   padding: 3rem;
   border-radius: 16px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-subtle);
+  transition: all 0.2s;
 }
 
 .error-icon {
-  color: var(--error);
+  color: var(--status-error);
   margin-bottom: 1.5rem;
 }
 
 .error-boundary-content h2 {
   font-size: 1.5rem;
   margin-bottom: 0.75rem;
-  color: var(--text);
+  color: var(--text-primary);
+  transition: color 0.2s;
 }
 
 .error-boundary-content p {
   color: var(--text-muted);
   margin-bottom: 1.5rem;
+  transition: color 0.2s;
 }
 
 .error-details {
   text-align: left;
   margin: 1.5rem 0;
   padding: 1rem;
-  background: var(--background);
+  background: var(--bg-app);
   border-radius: 8px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-subtle);
+  transition: all 0.2s;
 }
 
 .error-details summary {
   cursor: pointer;
   color: var(--text-muted);
   margin-bottom: 0.5rem;
+  transition: color 0.2s;
 }
 
 .error-details pre {
   font-size: 0.75rem;
-  color: var(--error);
+  color: var(--status-error);
   overflow-x: auto;
   margin-top: 0.5rem;
 }

@@ -9,7 +9,7 @@
 
 .spinner-icon {
   animation: spin 1s linear infinite;
-  color: var(--primary);
+  color: var(--accent-primary);
 }
 
 @keyframes spin {

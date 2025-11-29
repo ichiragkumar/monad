@@ -1,9 +1,10 @@
 .faucet-card {
-  background: var(--surface);
+  background: var(--bg-surface);
   padding: 1.5rem;
   border-radius: 12px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-subtle);
   margin-top: 1rem;
+  transition: all 0.2s;
 }
 
 .faucet-header {
@@ -16,13 +17,14 @@
 .faucet-icon {
   width: 24px;
   height: 24px;
-  color: var(--primary);
+  color: var(--accent-primary);
 }
 
 .faucet-header h3 {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--text);
+  color: var(--text-primary);
+  transition: color 0.2s;
 }
 
 .faucet-description {
@@ -30,6 +32,7 @@
   font-size: 0.875rem;
   margin-bottom: 1rem;
   line-height: 1.5;
+  transition: color 0.2s;
 }
 
 .btn-faucet {
@@ -38,8 +41,8 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: white;
+  background: var(--accent-primary);
+  color: var(--text-inverted);
   padding: 0.875rem 1.5rem;
   border-radius: 8px;
   font-weight: 600;
@@ -48,7 +51,7 @@
 
 .btn-faucet:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 12px var(--shadow-medium);
 }
 
 .btn-faucet:disabled {
@@ -60,9 +63,9 @@
   margin-top: 0.75rem;
   padding: 0.75rem;
   background: rgba(239, 68, 68, 0.1);
-  border: 1px solid var(--error);
+  border: 1px solid var(--status-error);
   border-radius: 8px;
-  color: var(--error);
+  color: var(--status-error);
   font-size: 0.875rem;
 }
 
@@ -70,14 +73,14 @@
   display: block;
   margin-top: 0.75rem;
   text-align: center;
-  color: var(--primary);
+  color: var(--accent-primary);
   text-decoration: none;
   font-size: 0.875rem;
   transition: color 0.2s;
 }
 
 .faucet-tx-link:hover {
-  color: var(--primary-dark);
+  color: var(--accent-primary-dark);
 }
 
 

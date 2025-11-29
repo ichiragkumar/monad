@@ -1,6 +1,8 @@
 import { Link, useLocation } from 'react-router-dom'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { Wallet } from 'lucide-react'
+import ThemeToggle from './ThemeToggle'
+import Footer from './Footer'
 import './Layout.css'
 
 interface LayoutProps {
@@ -33,14 +35,13 @@ export default function Layout({ children }: LayoutProps) {
             </Link>
           </nav>
           <div className="wallet-connect">
+            <ThemeToggle />
             <ConnectButton />
           </div>
         </div>
       </header>
       <main className="main-content">{children}</main>
-      <footer className="footer">
-        <p>Built on Monad • Fast, Low-Cost Micropayments</p>
-      </footer>
+      <Footer />
     </div>
   )
 }

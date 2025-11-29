@@ -16,29 +16,33 @@
 }
 
 .network-badge {
-  background: var(--surface);
+  background: var(--bg-surface);
   padding: 0.5rem 1rem;
   border-radius: 8px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-subtle);
   font-size: 0.875rem;
   color: var(--text-muted);
+  transition: all 0.2s;
 }
 
 .connect-prompt {
   text-align: center;
   padding: 4rem 2rem;
-  background: var(--surface);
+  background: var(--bg-surface);
   border-radius: 16px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-subtle);
+  transition: all 0.2s;
 }
 
 .connect-prompt h2 {
   margin-bottom: 1rem;
-  color: var(--text);
+  color: var(--text-primary);
+  transition: color 0.2s;
 }
 
 .connect-prompt p {
   color: var(--text-muted);
+  transition: color 0.2s;
 }
 
 .wallet-content {
@@ -50,10 +54,11 @@
 .balance-card,
 .send-card,
 .history-card {
-  background: var(--surface);
+  background: var(--bg-surface);
   padding: 2rem;
   border-radius: 16px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-subtle);
+  transition: all 0.2s;
 }
 
 .balance-header {
@@ -73,9 +78,9 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: var(--surface-light);
-  border: 1px solid var(--primary);
-  color: var(--primary);
+  background: var(--bg-elevated);
+  border: 1px solid var(--accent-primary);
+  color: var(--accent-primary);
   padding: 0.5rem 1rem;
   border-radius: 8px;
   font-size: 0.875rem;
@@ -85,8 +90,8 @@
 }
 
 .btn-ens-register:hover {
-  background: var(--primary);
-  color: white;
+  background: var(--accent-primary);
+  color: var(--text-inverted);
 }
 
 .balance-header h2 {
@@ -98,19 +103,19 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: var(--surface-light);
+  background: var(--bg-elevated);
   padding: 0.5rem 1rem;
   border-radius: 8px;
-  border: 1px solid var(--border);
-  color: var(--text);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
   font-size: 0.875rem;
   font-family: monospace;
   transition: all 0.2s;
 }
 
 .address-display:hover {
-  background: var(--border);
-  border-color: var(--primary);
+  background: var(--bg-hover);
+  border-color: var(--border-hover);
 }
 
 .balance-amount {
@@ -131,13 +136,15 @@
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  transition: color 0.2s;
 }
 
 .balance-value {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--text);
+  color: var(--text-primary);
   font-family: monospace;
+  transition: color 0.2s;
 }
 
 .balance-note {
@@ -164,7 +171,7 @@
 
 .spinner {
   animation: spin 1s linear infinite;
-  color: var(--primary);
+  color: var(--accent-primary);
 }
 
 @keyframes spin {
@@ -178,11 +185,11 @@
 
 .history-error {
   background: rgba(239, 68, 68, 0.1);
-  border: 1px solid var(--error);
+  border: 1px solid var(--status-error);
   border-radius: 8px;
   padding: 0.75rem;
   margin-bottom: 1rem;
-  color: var(--error);
+  color: var(--status-error);
   font-size: 0.875rem;
 }
 
@@ -212,28 +219,29 @@
 }
 
 .input {
-  background: var(--background);
-  border: 1px solid var(--border);
+  background: var(--bg-app);
+  border: 1px solid var(--border-subtle);
   border-radius: 8px;
   padding: 0.875rem 1rem;
-  color: var(--text);
+  color: var(--text-primary);
   font-size: 1rem;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
   font-family: monospace;
 }
 
 .input:focus {
   outline: none;
-  border-color: var(--primary);
+  border-color: var(--border-hover);
+  background: var(--bg-surface);
 }
 
 .max-button {
   position: absolute;
   right: 0.5rem;
   top: 2.25rem;
-  background: var(--surface-light);
-  border: 1px solid var(--border);
-  color: var(--text);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
   padding: 0.25rem 0.75rem;
   border-radius: 6px;
   font-size: 0.75rem;
@@ -241,8 +249,8 @@
 }
 
 .max-button:hover {
-  background: var(--border);
-  border-color: var(--primary);
+  background: var(--bg-hover);
+  border-color: var(--border-hover);
 }
 
 .btn-send {
@@ -259,8 +267,8 @@
 
 .error-message {
   background: rgba(239, 68, 68, 0.1);
-  border: 1px solid var(--error);
-  color: var(--error);
+  border: 1px solid var(--status-error);
+  color: var(--status-error);
   padding: 0.75rem;
   border-radius: 8px;
   font-size: 0.875rem;
@@ -271,7 +279,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  color: var(--primary);
+  color: var(--accent-primary);
   text-decoration: none;
   font-size: 0.875rem;
   margin-top: 0.5rem;
@@ -279,7 +287,7 @@
 }
 
 .tx-link:hover {
-  color: var(--primary-dark);
+  color: var(--accent-primary-dark);
 }
 
 .empty-state {
@@ -304,15 +312,15 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: var(--background);
+  background: var(--bg-app);
   border-radius: 8px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-subtle);
   transition: all 0.2s;
 }
 
 .transaction-item:hover {
-  border-color: var(--primary);
-  background: var(--surface-light);
+  border-color: var(--border-hover);
+  background: var(--bg-elevated);
 }
 
 .transaction-item.pending {
@@ -320,7 +328,7 @@
 }
 
 .transaction-item.failed {
-  border-color: var(--error);
+  border-color: var(--status-error);
 }
 
 .tx-info {
@@ -345,28 +353,31 @@
 
 .tx-status-badge.pending {
   background: rgba(245, 158, 11, 0.2);
-  color: var(--warning);
+  color: var(--status-warning);
 }
 
 .tx-status-badge.failed {
   background: rgba(239, 68, 68, 0.2);
-  color: var(--error);
+  color: var(--status-error);
 }
 
 .tx-type {
   font-weight: 600;
-  color: var(--text);
+  color: var(--text-primary);
+  transition: color 0.2s;
 }
 
 .tx-address {
   font-size: 0.875rem;
   color: var(--text-muted);
   font-family: monospace;
+  transition: color 0.2s;
 }
 
 .tx-time {
   font-size: 0.75rem;
   color: var(--text-muted);
+  transition: color 0.2s;
 }
 
 .tx-amount-section {
@@ -382,11 +393,11 @@
 }
 
 .tx-amount.sent {
-  color: var(--error);
+  color: var(--status-error);
 }
 
 .tx-amount.received {
-  color: var(--success);
+  color: var(--status-success);
 }
 
 .tx-link-small {
@@ -397,7 +408,7 @@
 }
 
 .tx-link-small:hover {
-  color: var(--primary);
+  color: var(--accent-primary);
 }
 
 @media (max-width: 768px) {

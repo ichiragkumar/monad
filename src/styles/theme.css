@@ -1,0 +1,76 @@
+/**
+ * CSS Variables for Theme System
+ * Elegant Dark-Green Palette - Professional & Premium
+ * NO purple, NO blue, NO gradients - ONLY approved colors
+ */
+
+:root {
+  /* Light Theme (default) */
+  --bg-app: #f9fafb;
+  --bg-surface: #ffffff;
+  --bg-elevated: #f3f4f6;
+  --bg-hover: #e5e7eb;
+
+  --text-primary: #111827;
+  --text-muted: #6b7280;
+  --text-inverted: #f9fafb;
+  --text-secondary: #4b5563;
+
+  --accent-primary: #0f7a45;
+  --accent-primary-dark: #12a55c;
+  --accent-primary-pressed: #0a5b34;
+  --accent-secondary: #134e3a;
+
+  --border-subtle: #e5e7eb;
+  --border-strong: #d1d5db;
+  --border-focus: #0f7a45;
+  --border-hover: #111827;
+
+  --status-success: #0f7a45;
+  --status-error: #ef4444;
+  --status-warning: #f59e0b;
+  --status-info: #0f7a45;
+
+  --shadow-soft: rgba(0, 0, 0, 0.05);
+  --shadow-medium: rgba(0, 0, 0, 0.1);
+  --shadow-strong: rgba(0, 0, 0, 0.15);
+}
+
+/* Dark Theme - Elegant Dark-Green Palette */
+:root[data-theme='dark'],
+[data-theme='dark'] {
+  /* Dark Surfaces */
+  --bg-app: #0a0a0c;
+  --bg-surface: #111113;
+  --bg-elevated: #0d0d10;
+  --bg-hover: #1a1a1e;
+
+  /* Text */
+  --text-primary: #f3f4f6;
+  --text-muted: #a1a1aa;
+  --text-inverted: #0a0a0c;
+  --text-secondary: #a1a1aa;
+
+  /* Primary Accent (Elegant Dark Green) */
+  --accent-primary: #0f7a45;
+  --accent-primary-dark: #12a55c;
+  --accent-primary-pressed: #0a5b34;
+  --accent-secondary: #134e3a;
+
+  /* Borders */
+  --border-subtle: #1a1a1e;
+  --border-strong: #27272a;
+  --border-focus: #0f7a45;
+  --border-hover: #f3f4f6;
+
+  /* Status Colors */
+  --status-success: #0f7a45;
+  --status-error: #ef4444;
+  --status-warning: #f59e0b;
+  --status-info: #0f7a45;
+
+  /* Shadows */
+  --shadow-soft: rgba(0, 0, 0, 0.3);
+  --shadow-medium: rgba(0, 0, 0, 0.5);
+  --shadow-strong: rgba(0, 0, 0, 0.7);
+}

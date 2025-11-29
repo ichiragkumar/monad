@@ -1,13 +1,14 @@
 .event-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.2s;
 }
 
 .event-card:hover {
-  border-color: var(--primary);
+  border-color: var(--border-hover);
+  background: var(--bg-elevated);
 }
 
 .event-card-header {
@@ -25,8 +26,9 @@
 .event-info h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--text);
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
+  transition: color 0.2s;
 }
 
 .event-meta {
@@ -35,6 +37,7 @@
   align-items: center;
   font-size: 0.875rem;
   color: var(--text-muted);
+  transition: color 0.2s;
 }
 
 .event-status {
@@ -59,38 +62,42 @@
 }
 
 .expand-button:hover {
-  background: var(--surface-light);
-  color: var(--text);
+  background: var(--bg-hover);
+  color: var(--text-primary);
 }
 
 .event-card-content {
   padding: 0 1.5rem 1.5rem;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-subtle);
   padding-top: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  transition: border-color 0.2s;
 }
 
 .event-description {
   color: var(--text-muted);
   line-height: 1.6;
+  transition: color 0.2s;
 }
 
 .event-stats {
   display: flex;
   gap: 2rem;
   padding: 1rem;
-  background: var(--background);
+  background: var(--bg-app);
   border-radius: 8px;
+  transition: background-color 0.2s;
 }
 
 .stat-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--text);
+  color: var(--text-primary);
   font-size: 0.875rem;
+  transition: color 0.2s;
 }
 
 .event-actions {

@@ -15,8 +15,8 @@ export default function EventCard({ event, onManageParticipants, onDistribute }:
 
   const statusColors = {
     draft: 'var(--text-muted)',
-    active: 'var(--success)',
-    completed: 'var(--primary)',
+    active: 'var(--status-success)',
+    completed: 'var(--accent-primary)',
   }
 
   return (
