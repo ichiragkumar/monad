@@ -4,18 +4,21 @@
  */
 
 import { useState, useEffect } from 'react'
-import { useAccount } from 'wagmi'
-import { Calendar, Clock, Pause, CheckCircle } from 'lucide-react'
+import { useAccount, useChainId } from 'wagmi'
+import { Calendar, Clock, Pause, CheckCircle, ExternalLink } from 'lucide-react'
 import { apiService } from '@/services/api'
 import { formatAddress, formatTimestamp } from '@/utils/format'
 import { formatUnits } from 'ethers'
+import { config } from '@/config/wagmi'
 import './MySubscriptions.css'
 
 export default function MySubscriptions() {
   const { address } = useAccount()
+  const chainId = useChainId()
   const [subscriptions, setSubscriptions] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'paused' | 'cancelled'>('all')
 
   useEffect(() => {
     if (!address) return
@@ -25,7 +28,11 @@ export default function MySubscriptions() {
       setError(null)
 
       try {
-        const response = await apiService.getSubscriptionsForUser(address || '', { status: 'active' })
+        // Get all subscriptions, filter by status if needed
+        const response = await apiService.getSubscriptionsForUser(
+          address || '', 
+          statusFilter !== 'all' ? { status: statusFilter } : {}
+        )
         if (response.success && response.data) {
           const data = response.data as any
           setSubscriptions(Array.isArray(data) ? data : data.subscriptions || [])
@@ -39,7 +46,7 @@ export default function MySubscriptions() {
     }
 
     fetchSubscriptions()
-  }, [address])
+  }, [address, statusFilter])
 
   if (!address) {
     return (
@@ -52,6 +59,30 @@ export default function MySubscriptions() {
     )
   }
 
+  // Get explorer URL
+  const getExplorerUrl = (txHash?: string, onChainId?: string) => {
+    if (!txHash && !onChainId) return null
+    
+    // Get chain from config
+    const chain = config.chains.find(c => c.id === chainId) || config.chains[0]
+    const explorerUrl = chain?.blockExplorers?.default?.url || 'https://monad-testnet.socialscan.io'
+    
+    // If we have txHash, link to transaction
+    if (txHash) {
+      return `${explorerUrl}/tx/${txHash}`
+    }
+    
+    // If we have onChainId, link to the subscription contract
+    // Note: This might need adjustment based on your contract structure
+    if (onChainId) {
+      // For now, we'll try to link to the subscription scheduler contract
+      // You might want to add a method to view individual subscriptions
+      return `${explorerUrl}/address/0xE119fC309692Fa06f81Fe324b63df6Af32fd394D`
+    }
+    
+    return null
+  }
+
   return (
     <div className="subscriptions-container">
       <div className="page-header">
@@ -59,6 +90,32 @@ export default function MySubscriptions() {
           <Calendar size={28} />
           My Subscriptions
         </h1>
+        <div className="status-filters">
+          <button
+            className={`filter-btn ${statusFilter === 'all' ? 'active' : ''}`}
+            onClick={() => setStatusFilter('all')}
+          >
+            All
+          </button>
+          <button
+            className={`filter-btn ${statusFilter === 'active' ? 'active' : ''}`}
+            onClick={() => setStatusFilter('active')}
+          >
+            Active
+          </button>
+          <button
+            className={`filter-btn ${statusFilter === 'paused' ? 'active' : ''}`}
+            onClick={() => setStatusFilter('paused')}
+          >
+            Paused
+          </button>
+          <button
+            className={`filter-btn ${statusFilter === 'cancelled' ? 'active' : ''}`}
+            onClick={() => setStatusFilter('cancelled')}
+          >
+            Cancelled
+          </button>
+        </div>
       </div>
 
       {isLoading && (
@@ -77,9 +134,11 @@ export default function MySubscriptions() {
       {!isLoading && subscriptions.length === 0 && (
         <div className="empty-state">
           <Calendar size={48} />
-          <p>No subscriptions yet</p>
+          <p>No subscriptions {statusFilter !== 'all' ? `(${statusFilter})` : ''}</p>
           <p className="empty-note">
-            You don't have any active subscriptions. Create one from your wallet page.
+            {statusFilter === 'all' 
+              ? "You don't have any subscriptions yet. Create one from your wallet page."
+              : `You don't have any ${statusFilter} subscriptions.`}
           </p>
         </div>
       )}
@@ -94,19 +153,33 @@ export default function MySubscriptions() {
               <div className="subscription-header">
                 <div className="subscription-info">
                   <h3>Subscription #{sub.onChainId || sub.id}</h3>
-                  <span className={`status-badge ${sub.status === 'active' ? 'active' : 'paused'}`}>
-                    {sub.status === 'active' ? (
-                      <>
-                        <CheckCircle size={14} />
-                        Active
-                      </>
-                    ) : (
-                      <>
-                        <Pause size={14} />
-                        {sub.status || 'Paused'}
-                      </>
+                  <div className="header-actions">
+                    <span className={`status-badge ${sub.status === 'active' ? 'active' : 'paused'}`}>
+                      {sub.status === 'active' ? (
+                        <>
+                          <CheckCircle size={14} />
+                          Active
+                        </>
+                      ) : (
+                        <>
+                          <Pause size={14} />
+                          {sub.status || 'Paused'}
+                        </>
+                      )}
+                    </span>
+                    {(sub.txHash || sub.onChainId) && getExplorerUrl(sub.txHash, sub.onChainId) && (
+                      <a
+                        href={getExplorerUrl(sub.txHash, sub.onChainId) || '#'}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="explorer-link"
+                        title="View on Explorer"
+                      >
+                        <ExternalLink size={16} />
+                        View on Explorer
+                      </a>
                     )}
-                  </span>
+                  </div>
                 </div>
               </div>
 
@@ -118,7 +191,17 @@ export default function MySubscriptions() {
                 <div className="detail-row">
                   <span className="label">Amount:</span>
                   <span className="value amount">
-                    {formatUnits(sub.amountPerPeriod || sub.amount || '0', 18)} XTK
+                    {(() => {
+                      try {
+                        const amount = sub.amountPerPeriod || sub.amount || '0'
+                        if (!amount || amount === 'NaN' || isNaN(Number(amount))) {
+                          return '0.0000'
+                        }
+                        return formatUnits(amount, 18)
+                      } catch (error) {
+                        return '0.0000'
+                      }
+                    })()} XTK
                   </span>
                 </div>
                 <div className="detail-row">
@@ -132,11 +215,22 @@ export default function MySubscriptions() {
                   <span className="label">Next Payment:</span>
                   <span className="value next-payment">
                     <Clock size={14} />
-                    {sub.nextPaymentTime 
-                      ? formatTimestamp(Number(sub.nextPaymentTime))
-                      : sub.nextBillingDate
-                        ? new Date(sub.nextBillingDate).toLocaleString()
-                        : 'N/A'}
+                    {(() => {
+                      if (sub.nextPaymentTime) {
+                        const time = Number(sub.nextPaymentTime)
+                        if (!isNaN(time) && time > 0) {
+                          return formatTimestamp(time)
+                        }
+                      }
+                      if (sub.nextBillingDate) {
+                        try {
+                          return new Date(sub.nextBillingDate).toLocaleString()
+                        } catch {
+                          return 'N/A'
+                        }
+                      }
+                      return 'N/A'
+                    })()}
                   </span>
                 </div>
                 <div className="detail-row">
@@ -147,6 +241,31 @@ export default function MySubscriptions() {
                       : `${sub.paidCount || 0} payments`}
                   </span>
                 </div>
+                {sub.txHash && (
+                  <div className="detail-row">
+                    <span className="label">Transaction:</span>
+                    <span className="value">
+                      <a
+                        href={getExplorerUrl(sub.txHash) || '#'}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="tx-link"
+                        title="View transaction on Explorer"
+                      >
+                        {formatAddress(sub.txHash, 10, 8)}
+                        <ExternalLink size={14} />
+                      </a>
+                    </span>
+                  </div>
+                )}
+                {sub.createdAt && (
+                  <div className="detail-row">
+                    <span className="label">Created:</span>
+                    <span className="value">
+                      {new Date(sub.createdAt).toLocaleString()}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           ))}

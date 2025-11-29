@@ -13,7 +13,7 @@ import {
 
 // Monad Testnet configuration
 // Note: Update with actual Monad testnet details when available
-const monadTestnet = {
+export const monadTestnet = {
   id: 10143, // Placeholder - update with actual chain ID
   name: 'Monad Testnet',
   nativeCurrency: {

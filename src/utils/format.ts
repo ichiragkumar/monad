@@ -28,27 +28,49 @@ export function formatAddress(
  * @returns Formatted amount string
  */
 export function formatTokenAmount(
-  amount: bigint | string,
+  amount: bigint | string | null | undefined,
   decimals: number = 18,
   displayDecimals: number = 4
 ): string {
-  const amountStr = typeof amount === 'string' ? amount : amount.toString()
-  const divisor = BigInt(10 ** decimals)
-  const whole = BigInt(amountStr) / divisor
-  const remainder = BigInt(amountStr) % divisor
-  
-  if (remainder === 0n) {
-    return whole.toString()
+  // Handle null, undefined, or empty values
+  if (amount === null || amount === undefined || amount === '') {
+    return '0'
   }
-  
-  const remainderStr = remainder.toString().padStart(decimals, '0')
-  const trimmed = remainderStr.slice(0, displayDecimals).replace(/0+$/, '')
-  
-  if (trimmed === '') {
-    return whole.toString()
+
+  try {
+    const amountStr = typeof amount === 'string' ? amount.trim() : amount.toString()
+    
+    // Check if string is valid number
+    if (typeof amount === 'string' && (isNaN(Number(amountStr)) || amountStr === '')) {
+      return '0'
+    }
+
+    // Ensure the string represents a valid integer
+    if (typeof amount === 'string' && !/^\d+$/.test(amountStr)) {
+      return '0'
+    }
+
+    const divisor = BigInt(10 ** decimals)
+    const amountBigInt = BigInt(amountStr)
+    const whole = amountBigInt / divisor
+    const remainder = amountBigInt % divisor
+    
+    if (remainder === 0n) {
+      return whole.toString()
+    }
+    
+    const remainderStr = remainder.toString().padStart(decimals, '0')
+    const trimmed = remainderStr.slice(0, displayDecimals).replace(/0+$/, '')
+    
+    if (trimmed === '') {
+      return whole.toString()
+    }
+    
+    return `${whole}.${trimmed}`
+  } catch (error) {
+    console.error('Error formatting token amount:', error, amount)
+    return '0'
   }
-  
-  return `${whole}.${trimmed}`
 }
 
 /**

@@ -149,7 +149,17 @@ export default function PaymentInitiated() {
                 <div className="detail-row">
                   <span className="label">Total Amount:</span>
                   <span className="value amount">
-                    {formatUnits(payment.totalAmount || '0', 18)} XTK
+                    {(() => {
+                      try {
+                        const amount = payment.totalAmount || '0'
+                        if (!amount || amount === 'NaN' || isNaN(Number(amount))) {
+                          return '0.0000'
+                        }
+                        return formatUnits(amount, 18)
+                      } catch (error) {
+                        return '0.0000'
+                      }
+                    })()} XTK
                   </span>
                 </div>
                 <div className="detail-row">
@@ -159,20 +169,40 @@ export default function PaymentInitiated() {
                   </span>
                 </div>
                 <div className="detail-row">
-                  <span className="label">Initiated:</span>
-                  <span className="value">
-                    <Clock size={14} />
-                    {payment.createdAt
-                      ? formatTimestamp(Math.floor(new Date(payment.createdAt).getTime() / 1000))
-                      : 'N/A'}
-                  </span>
+                    <span className="label">Initiated:</span>
+                    <span className="value">
+                      <Clock size={14} />
+                      {(() => {
+                        if (payment.createdAt) {
+                          try {
+                            const timestamp = Math.floor(new Date(payment.createdAt).getTime() / 1000)
+                            if (!isNaN(timestamp) && timestamp > 0) {
+                              return formatTimestamp(timestamp)
+                            }
+                          } catch {
+                            return 'N/A'
+                          }
+                        }
+                        return 'N/A'
+                      })()}
+                    </span>
                 </div>
                 {payment.executedAt && (
                   <div className="detail-row">
                     <span className="label">Executed:</span>
                     <span className="value">
                       <CheckCircle size={14} />
-                      {formatTimestamp(Math.floor(new Date(payment.executedAt).getTime() / 1000))}
+                      {(() => {
+                        try {
+                          const timestamp = Math.floor(new Date(payment.executedAt).getTime() / 1000)
+                          if (!isNaN(timestamp) && timestamp > 0) {
+                            return formatTimestamp(timestamp)
+                          }
+                        } catch {
+                          return 'N/A'
+                        }
+                        return 'N/A'
+                      })()}
                     </span>
                   </div>
                 )}
@@ -181,7 +211,17 @@ export default function PaymentInitiated() {
                     <span className="label">Confirmed:</span>
                     <span className="value">
                       <CheckCircle size={14} />
-                      {formatTimestamp(Math.floor(new Date(payment.confirmedAt).getTime() / 1000))}
+                      {(() => {
+                        try {
+                          const timestamp = Math.floor(new Date(payment.confirmedAt).getTime() / 1000)
+                          if (!isNaN(timestamp) && timestamp > 0) {
+                            return formatTimestamp(timestamp)
+                          }
+                        } catch {
+                          return 'N/A'
+                        }
+                        return 'N/A'
+                      })()}
                     </span>
                   </div>
                 )}
@@ -209,7 +249,16 @@ export default function PaymentInitiated() {
                         <span className="recipient-address">{formatAddress(address)}</span>
                         {amount && (
                           <span className="recipient-amount">
-                            {formatUnits(amount, 18)} XTK
+                            {(() => {
+                              try {
+                                if (!amount || amount === 'NaN' || isNaN(Number(amount))) {
+                                  return '0.0000'
+                                }
+                                return formatUnits(amount, 18)
+                              } catch (error) {
+                                return '0.0000'
+                              }
+                            })()} XTK
                           </span>
                         )}
                       </div>

@@ -128,7 +128,17 @@ export default function MyEventParticipants() {
                   {participant.amount && (
                     <div className="detail-item">
                       <Gift size={16} />
-                      <span>Your Reward: {formatUnits(participant.amount, 18)} XTK</span>
+                      <span>Your Reward: {(() => {
+                        try {
+                          const amount = participant.amount
+                          if (!amount || amount === 'NaN' || isNaN(Number(amount))) {
+                            return '0.0000'
+                          }
+                          return formatUnits(amount, 18)
+                        } catch (error) {
+                          return '0.0000'
+                        }
+                      })()} XTK</span>
                       {participant.claimed !== undefined && (
                         <span className={participant.claimed ? 'claimed' : 'not-claimed'}>
                           ({participant.claimed ? 'Claimed' : 'Not Claimed'})
@@ -145,7 +155,17 @@ export default function MyEventParticipants() {
                   {eventItem.totalDistributed && (
                     <div className="detail-item">
                       <Gift size={16} />
-                      <span>Total Distributed: {formatUnits(eventItem.totalDistributed, 18)} XTK</span>
+                      <span>Total Distributed: {(() => {
+                        try {
+                          const amount = eventItem.totalDistributed
+                          if (!amount || amount === 'NaN' || isNaN(Number(amount))) {
+                            return '0.0000'
+                          }
+                          return formatUnits(amount, 18)
+                        } catch (error) {
+                          return '0.0000'
+                        }
+                      })()} XTK</span>
                     </div>
                   )}
                 </div>

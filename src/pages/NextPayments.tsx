@@ -129,18 +129,39 @@ export default function NextPayments() {
                   <div className="detail-row">
                     <span className="label">Amount:</span>
                     <span className="value amount">
-                      {formatUnits(payment.amount || '0', 18)} XTK
+                      {(() => {
+                        try {
+                          const amount = payment.amount || '0'
+                          if (!amount || amount === 'NaN' || isNaN(Number(amount))) {
+                            return '0.0000'
+                          }
+                          return formatUnits(amount, 18)
+                        } catch (error) {
+                          return '0.0000'
+                        }
+                      })()} XTK
                     </span>
                   </div>
                   <div className="detail-row">
                     <span className="label">Due Date:</span>
                     <span className={`value ${due ? 'due' : ''}`}>
                       <Calendar size={14} />
-                      {payment.nextPaymentTime
-                        ? formatTimestamp(Number(payment.nextPaymentTime))
-                        : payment.nextBillingDate
-                          ? new Date(payment.nextBillingDate).toLocaleString()
-                          : 'N/A'}
+                      {(() => {
+                        if (payment.nextPaymentTime) {
+                          const time = Number(payment.nextPaymentTime)
+                          if (!isNaN(time) && time > 0) {
+                            return formatTimestamp(time)
+                          }
+                        }
+                        if (payment.nextBillingDate) {
+                          try {
+                            return new Date(payment.nextBillingDate).toLocaleString()
+                          } catch {
+                            return 'N/A'
+                          }
+                        }
+                        return 'N/A'
+                      })()}
                     </span>
                   </div>
                   {payment.daysUntilDue !== undefined && (
