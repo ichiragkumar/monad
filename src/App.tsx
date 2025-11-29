@@ -5,6 +5,8 @@ import { RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { config } from './config/wagmi'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import Layout from './components/Layout'
+import ScrollToTop from './components/ScrollToTop'
+import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/Home'
 import Wallet from './pages/Wallet'
 import VendorDashboard from './pages/VendorDashboard'
@@ -22,11 +24,26 @@ function App() {
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider>
             <Router>
+              <ScrollToTop />
               <Layout>
                     <Routes>
                       <Route path="/" element={<Home />} />
-                      <Route path="/wallet" element={<Wallet />} />
-                      <Route path="/vendor" element={<VendorDashboard />} />
+                      <Route 
+                        path="/wallet" 
+                        element={
+                          <ProtectedRoute>
+                            <Wallet />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/vendor" 
+                        element={
+                          <ProtectedRoute>
+                            <VendorDashboard />
+                          </ProtectedRoute>
+                        } 
+                      />
                       <Route path="/privacy" element={<Privacy />} />
                       <Route path="/terms" element={<Terms />} />
                     </Routes>

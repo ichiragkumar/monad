@@ -23,7 +23,7 @@ export default function Layout({ children }: LayoutProps) {
             <Wallet className="logo-icon" />
             <span>MonadPay</span>
           </Link>
-          {isLandingPage ? (
+          {!isConnected ? (
             <nav className="nav">
               <a
                 href="#pricing"
