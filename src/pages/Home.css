@@ -4,10 +4,19 @@
   gap: 6rem;
 }
 
+.landing-page {
+  scroll-behavior: smooth;
+}
+
 /* Hero Section */
 .hero {
   text-align: center;
-  padding: 4rem 0;
+  padding: 6rem 0;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   animation: fadeInUp 0.8s ease-out;
 }
 
@@ -269,8 +278,13 @@
 
 /* Pricing Section */
 .pricing-section {
-  padding: 4rem 0;
+  padding: 6rem 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   animation: fadeInUp 0.8s ease-out;
+  scroll-margin-top: 2rem;
 }
 
 .pricing-cards {
@@ -378,12 +392,17 @@
 
 /* Roadmap Section */
 .roadmap-section {
-  padding: 4rem 0;
+  padding: 6rem 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   animation: fadeInUp 0.8s ease-out;
+  scroll-margin-top: 2rem;
 }
 
 .roadmap {
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
   position: relative;
   padding-left: 2rem;
@@ -439,8 +458,9 @@
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 2rem;
   transition: all 0.3s ease;
+  max-width: 100%;
 }
 
 .roadmap-item:hover .roadmap-content {

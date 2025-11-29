@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useAccount } from 'wagmi'
-import { Send, Gift, Users, Zap, Check, ArrowRight } from 'lucide-react'
+import { Check, ArrowRight } from 'lucide-react'
 import './Home.css'
 
 export default function Home() {
@@ -32,7 +32,7 @@ export default function Home() {
   }
 
   return (
-    <div className="home">
+    <div className="home landing-page">
       {/* Hero Section */}
       <section className="hero">
         <h1 className="hero-title">
@@ -53,119 +53,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="features-section">
-        <h2 className="section-title">Why Choose MonadPay?</h2>
-        <div className="features">
-          <div className="feature-card">
-            <div className="feature-icon">
-              <Send />
-            </div>
-            <h3>Peer-to-Peer Payments</h3>
-            <p>
-              Split bills, tip creators, or send micro-donations instantly. With
-              Monad's negligible fees, even $0.50 payments are practical.
-            </p>
-          </div>
-
-          <div className="feature-card">
-            <div className="feature-icon">
-              <Gift />
-            </div>
-            <h3>Loyalty Rewards</h3>
-            <p>
-              Businesses can distribute tokenized loyalty points that customers
-              truly own. Transparent, secure, and interoperable.
-            </p>
-          </div>
-
-          <div className="feature-card">
-            <div className="feature-icon">
-              <Users />
-            </div>
-            <h3>Event Rewards</h3>
-            <p>
-              Hackathons, quizzes, and communities can reward participants with
-              on-chain tokens. All distributions are verifiable and trustless.
-            </p>
-          </div>
-
-          <div className="feature-card">
-            <div className="feature-icon">
-              <Zap />
-            </div>
-            <h3>Lightning Fast</h3>
-            <p>
-              Monad delivers 10,000 TPS with sub-second finality. Experience
-              blockchain payments that feel instant.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="stats-section">
-        <h2 className="section-title">Our Impact</h2>
-        <div className="stats">
-          <div className="stat">
-            <div className="stat-value">10,000+</div>
-            <div className="stat-label">Transactions per Second</div>
-          </div>
-          <div className="stat">
-            <div className="stat-value">&lt;1s</div>
-            <div className="stat-label">Transaction Finality</div>
-          </div>
-          <div className="stat">
-            <div className="stat-value">~$0.001</div>
-            <div className="stat-label">Average Transaction Fee</div>
-          </div>
-          <div className="stat">
-            <div className="stat-value">50K+</div>
-            <div className="stat-label">Our Participants</div>
-          </div>
-          <div className="stat">
-            <div className="stat-value">1,200+</div>
-            <div className="stat-label">Our Business</div>
-          </div>
-          <div className="stat">
-            <div className="stat-value">25K+</div>
-            <div className="stat-label">Individual Supporters</div>
-          </div>
-          <div className="stat">
-            <div className="stat-value">100+</div>
-            <div className="stat-label">Hosted Events</div>
-          </div>
-          <div className="stat">
-            <div className="stat-value">500+</div>
-            <div className="stat-label">Contributors</div>
-          </div>
-        </div>
-      </section>
-
-      {/* Trusted By Section */}
-      <section className="trusted-section">
-        <h2 className="section-title">Trusted & Used By</h2>
-        <div className="companies-scroll">
-          <div className="companies-track">
-            <div className="company-logo">Company A</div>
-            <div className="company-logo">Company B</div>
-            <div className="company-logo">Company C</div>
-            <div className="company-logo">Company D</div>
-            <div className="company-logo">Company E</div>
-            <div className="company-logo">Company F</div>
-            <div className="company-logo">Company G</div>
-            <div className="company-logo">Company H</div>
-            {/* Duplicate for seamless loop */}
-            <div className="company-logo">Company A</div>
-            <div className="company-logo">Company B</div>
-            <div className="company-logo">Company C</div>
-            <div className="company-logo">Company D</div>
-          </div>
-        </div>
-      </section>
-
       {/* Pricing Section */}
-      <section className="pricing-section">
+      <section id="pricing" className="pricing-section">
         <h2 className="section-title">Simple, Transparent Pricing</h2>
         <div className="pricing-cards">
           <div className="pricing-card">
@@ -218,7 +107,7 @@ export default function Home() {
       </section>
 
       {/* Roadmap Section */}
-      <section className="roadmap-section">
+      <section id="roadmap" className="roadmap-section">
         <h2 className="section-title">Our Roadmap</h2>
         <div className="roadmap">
           <div className="roadmap-item completed">

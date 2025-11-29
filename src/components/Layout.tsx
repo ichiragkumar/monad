@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { useAccount } from 'wagmi'
 import { Wallet } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
 import Footer from './Footer'
@@ -11,6 +12,8 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const location = useLocation()
+  const { isConnected } = useAccount()
+  const isLandingPage = location.pathname === '/' && !isConnected
 
   return (
     <div className="layout">
@@ -20,20 +23,43 @@ export default function Layout({ children }: LayoutProps) {
             <Wallet className="logo-icon" />
             <span>MonadPay</span>
           </Link>
-          <nav className="nav">
-            <Link
-              to="/wallet"
-              className={location.pathname === '/wallet' ? 'active' : ''}
-            >
-              Wallet
-            </Link>
-            <Link
-              to="/vendor"
-              className={location.pathname === '/vendor' ? 'active' : ''}
-            >
-              Vendor Dashboard
-            </Link>
-          </nav>
+          {isLandingPage ? (
+            <nav className="nav">
+              <a
+                href="#pricing"
+                onClick={(e) => {
+                  e.preventDefault()
+                  document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })
+                }}
+              >
+                Pricing
+              </a>
+              <a
+                href="#roadmap"
+                onClick={(e) => {
+                  e.preventDefault()
+                  document.getElementById('roadmap')?.scrollIntoView({ behavior: 'smooth' })
+                }}
+              >
+                Roadmap
+              </a>
+            </nav>
+          ) : (
+            <nav className="nav">
+              <Link
+                to="/wallet"
+                className={location.pathname === '/wallet' ? 'active' : ''}
+              >
+                Wallet
+              </Link>
+              <Link
+                to="/vendor"
+                className={location.pathname === '/vendor' ? 'active' : ''}
+              >
+                Vendor Dashboard
+              </Link>
+            </nav>
+          )}
           <div className="wallet-connect">
             <ThemeToggle />
             <ConnectButton />
