@@ -8,6 +8,8 @@ import Layout from './components/Layout'
 import Home from './pages/Home'
 import Wallet from './pages/Wallet'
 import VendorDashboard from './pages/VendorDashboard'
+import Privacy from './pages/Privacy'
+import Terms from './pages/Terms'
 import '@rainbow-me/rainbowkit/styles.css'
 import './App.css'
 
@@ -21,11 +23,13 @@ function App() {
           <RainbowKitProvider>
             <Router>
               <Layout>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/wallet" element={<Wallet />} />
-                  <Route path="/vendor" element={<VendorDashboard />} />
-                </Routes>
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/wallet" element={<Wallet />} />
+                      <Route path="/vendor" element={<VendorDashboard />} />
+                      <Route path="/privacy" element={<Privacy />} />
+                      <Route path="/terms" element={<Terms />} />
+                    </Routes>
               </Layout>
             </Router>
           </RainbowKitProvider>
