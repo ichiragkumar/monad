@@ -129,7 +129,29 @@ export function useSubscriptions() {
       throw new Error('Wallet not connected')
     }
 
+    // Validate all parameters are non-negative before converting to BigInt
+    if (interval < 0) {
+      throw new Error('Interval must be non-negative')
+    }
+    if (totalPayments < 0) {
+      throw new Error('Total payments must be non-negative')
+    }
+    if (startTime < 0) {
+      throw new Error('Start time must be non-negative')
+    }
+
+    // Validate amount is positive
+    const amountNum = parseFloat(amount)
+    if (isNaN(amountNum) || amountNum <= 0) {
+      throw new Error('Amount must be a positive number')
+    }
+
     const amountWei = parseEther(amount)
+
+    // Ensure all values are safe for BigInt conversion
+    const intervalBigInt = BigInt(Math.max(0, Math.floor(interval)))
+    const totalPaymentsBigInt = BigInt(Math.max(0, Math.floor(totalPayments)))
+    const startTimeBigInt = BigInt(Math.max(0, Math.floor(startTime)))
 
     return writeContract({
       address: SUBSCRIPTION_SCHEDULER_ADDRESS,
@@ -139,9 +161,9 @@ export function useSubscriptions() {
         TOKEN_CONTRACT_ADDRESS,
         recipient as `0x${string}`,
         amountWei,
-        BigInt(interval),
-        BigInt(totalPayments),
-        BigInt(startTime),
+        intervalBigInt,
+        totalPaymentsBigInt,
+        startTimeBigInt,
       ],
     })
   }

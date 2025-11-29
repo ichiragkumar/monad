@@ -85,9 +85,45 @@ export default function SubscriptionManager() {
       return
     }
 
-    const intervalSeconds = parseInt(formData.interval) * 24 * 60 * 60
+    // Validate and parse interval (must be positive)
+    const intervalDays = parseInt(formData.interval)
+    if (isNaN(intervalDays) || intervalDays <= 0) {
+      alert('Interval must be a positive number of days')
+      return
+    }
+    const intervalSeconds = intervalDays * 24 * 60 * 60
+
+    // Validate and parse totalPayments (must be non-negative, 0 for unlimited)
     const totalPayments = parseInt(formData.totalPayments) || 0
-    const startTime = formData.startTime === '0' ? 0 : Math.floor(new Date(formData.startTime).getTime() / 1000)
+    if (isNaN(totalPayments) || totalPayments < 0) {
+      alert('Total payments must be 0 (unlimited) or a positive number')
+      return
+    }
+
+    // Validate and parse startTime (must be non-negative, 0 for immediate)
+    let startTime = 0
+    if (formData.startTime !== '0') {
+      const parsedTime = Math.floor(new Date(formData.startTime).getTime() / 1000)
+      if (isNaN(parsedTime) || parsedTime < 0) {
+        alert('Invalid start date. Please select a valid future date or leave empty for immediate start.')
+        return
+      }
+      // Allow past dates (might be useful for testing), but ensure it's a valid timestamp
+      startTime = parsedTime
+    }
+
+    // Validate amount (must be positive)
+    const amountNum = parseFloat(formData.amount)
+    if (isNaN(amountNum) || amountNum <= 0) {
+      alert('Amount must be a positive number')
+      return
+    }
+
+    // Validate recipient address
+    if (!formData.recipient.startsWith('0x') || formData.recipient.length !== 42) {
+      alert('Please enter a valid Ethereum address')
+      return
+    }
 
     try {
       await createSubscription(
@@ -161,11 +197,16 @@ export default function SubscriptionManager() {
             <label>Amount per Payment (XTK)</label>
             <input
               type="number"
+              min="0"
               step="0.0001"
               value={formData.amount}
-              onChange={(e) =>
-                setFormData({ ...formData, amount: e.target.value })
-              }
+              onChange={(e) => {
+                const value = e.target.value
+                // Only allow positive numbers
+                if (value === '' || (parseFloat(value) >= 0)) {
+                  setFormData({ ...formData, amount: value })
+                }
+              }}
               placeholder="0.0"
               className="input"
             />
@@ -174,10 +215,16 @@ export default function SubscriptionManager() {
             <label>Interval (days)</label>
             <input
               type="number"
+              min="1"
+              step="1"
               value={formData.interval}
-              onChange={(e) =>
-                setFormData({ ...formData, interval: e.target.value })
-              }
+              onChange={(e) => {
+                const value = e.target.value
+                // Only allow positive integers
+                if (value === '' || (parseInt(value) > 0)) {
+                  setFormData({ ...formData, interval: value })
+                }
+              }}
               placeholder="30"
               className="input"
             />
@@ -186,10 +233,16 @@ export default function SubscriptionManager() {
             <label>Total Payments (0 for unlimited)</label>
             <input
               type="number"
+              min="0"
+              step="1"
               value={formData.totalPayments}
-              onChange={(e) =>
-                setFormData({ ...formData, totalPayments: e.target.value })
-              }
+              onChange={(e) => {
+                const value = e.target.value
+                // Only allow non-negative integers
+                if (value === '' || (parseInt(value) >= 0)) {
+                  setFormData({ ...formData, totalPayments: value })
+                }
+              }}
               placeholder="0"
               className="input"
             />
