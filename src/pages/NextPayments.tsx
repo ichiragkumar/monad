@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from 'react'
 import { useAccount } from 'wagmi'
-import { CreditCard, Clock, Calendar, CheckCircle } from 'lucide-react'
+import { CreditCard, Clock, Calendar } from 'lucide-react'
 import { apiService } from '@/services/api'
 import { formatAddress, formatTimestamp } from '@/utils/format'
 import { formatUnits } from 'ethers'
@@ -29,7 +29,8 @@ export default function NextPayments() {
         const response = await apiService.getNextPayments(address || '', { days: 30 })
         if (response.success && response.data) {
           const data = response.data as any
-          const payments = Array.isArray(data) ? data : data.payments || []
+          // Backend returns array directly or in data.payments
+          const payments = Array.isArray(data) ? data : (data.payments || [])
           setPayments(payments)
         }
       } catch (err: any) {
@@ -46,11 +47,13 @@ export default function NextPayments() {
     return () => clearInterval(interval)
   }, [address])
 
-  const isPaymentDue = (nextPaymentTime: number | string | null): boolean => {
-    if (!nextPaymentTime) return false
-    const time = typeof nextPaymentTime === 'string' 
-      ? new Date(nextPaymentTime).getTime() / 1000
-      : Number(nextPaymentTime)
+  // Use isDue from backend if available, otherwise calculate
+  const isPaymentDue = (payment: any): boolean => {
+    if (payment.isDue !== undefined) return payment.isDue
+    if (!payment.nextPaymentTime) return false
+    const time = typeof payment.nextPaymentTime === 'string' 
+      ? new Date(payment.nextPaymentTime).getTime() / 1000
+      : Number(payment.nextPaymentTime)
     return Date.now() / 1000 >= time
   }
 
@@ -100,7 +103,7 @@ export default function NextPayments() {
       {!isLoading && payments.length > 0 && (
         <div className="payments-list">
           {payments.map((payment, index) => {
-            const due = isPaymentDue(payment.nextPaymentTime)
+            const due = isPaymentDue(payment)
             return (
               <div
                 key={payment.subscriptionId || index}
@@ -135,20 +138,38 @@ export default function NextPayments() {
                       <Calendar size={14} />
                       {payment.nextPaymentTime
                         ? formatTimestamp(Number(payment.nextPaymentTime))
-                        : 'N/A'}
+                        : payment.nextBillingDate
+                          ? new Date(payment.nextBillingDate).toLocaleString()
+                          : 'N/A'}
                     </span>
                   </div>
+                  {payment.daysUntilDue !== undefined && (
+                    <div className="detail-row">
+                      <span className="label">Days Until Due:</span>
+                      <span className="value">
+                        {payment.daysUntilDue} {payment.daysUntilDue === 1 ? 'day' : 'days'}
+                      </span>
+                    </div>
+                  )}
                   <div className="detail-row">
                     <span className="label">Subscription:</span>
                     <span className="value">
-                      #{payment.subscriptionId}
+                      #{payment.subscriptionId || payment.onChainId}
                     </span>
                   </div>
-                  {payment.totalPayments > 0 && (
+                  {payment.progress && (
                     <div className="detail-row">
                       <span className="label">Progress:</span>
                       <span className="value">
-                        {payment.paidCount} / {payment.totalPayments}
+                        {payment.progress}
+                      </span>
+                    </div>
+                  )}
+                  {payment.totalPayments > 0 && !payment.progress && (
+                    <div className="detail-row">
+                      <span className="label">Progress:</span>
+                      <span className="value">
+                        {payment.paidCount || 0} / {payment.totalPayments}
                       </span>
                     </div>
                   )}

@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from 'react'
 import { useAccount } from 'wagmi'
-import { Send, Clock, CheckCircle, X, ExternalLink } from 'lucide-react'
+import { Send, Clock, CheckCircle, X } from 'lucide-react'
 import { apiService } from '@/services/api'
 import { formatAddress, formatTimestamp } from '@/utils/format'
 import { formatUnits } from 'ethers'
@@ -97,27 +97,32 @@ export default function PaymentInitiated() {
         <div className="payments-list">
           {payments.map((payment) => (
             <div
-              key={payment.id}
+              key={payment.id || payment.linkId}
               className={`payment-card ${payment.status?.toLowerCase()}`}
             >
               <div className="payment-header">
                 <div className="payment-info">
                   <h3>Payment Link</h3>
                   <span className={`status-badge ${payment.status?.toLowerCase()}`}>
-                    {payment.status === 'confirmed' ? (
+                    {payment.status === 'executed' || payment.status === 'confirmed' ? (
                       <>
                         <CheckCircle size={14} />
-                        Confirmed
+                        {payment.status === 'executed' ? 'Executed' : 'Confirmed'}
                       </>
                     ) : payment.status === 'pending' ? (
                       <>
                         <Clock size={14} />
                         Pending
                       </>
+                    ) : payment.status === 'expired' ? (
+                      <>
+                        <X size={14} />
+                        Expired
+                      </>
                     ) : (
                       <>
                         <X size={14} />
-                        Failed
+                        {payment.status || 'Unknown'}
                       </>
                     )}
                   </span>
@@ -125,12 +130,22 @@ export default function PaymentInitiated() {
               </div>
 
               <div className="payment-details">
-                <div className="detail-row">
-                  <span className="label">Transaction Hash:</span>
-                  <span className="value hash">
-                    {formatAddress(payment.txHash, 10, 8)}
-                  </span>
-                </div>
+                {payment.txHash && (
+                  <div className="detail-row">
+                    <span className="label">Transaction Hash:</span>
+                    <span className="value hash">
+                      {formatAddress(payment.txHash, 10, 8)}
+                    </span>
+                  </div>
+                )}
+                {payment.linkId && (
+                  <div className="detail-row">
+                    <span className="label">Link ID:</span>
+                    <span className="value">
+                      {payment.linkId}
+                    </span>
+                  </div>
+                )}
                 <div className="detail-row">
                   <span className="label">Total Amount:</span>
                   <span className="value amount">
@@ -152,7 +167,16 @@ export default function PaymentInitiated() {
                       : 'N/A'}
                   </span>
                 </div>
-                {payment.confirmedAt && (
+                {payment.executedAt && (
+                  <div className="detail-row">
+                    <span className="label">Executed:</span>
+                    <span className="value">
+                      <CheckCircle size={14} />
+                      {formatTimestamp(Math.floor(new Date(payment.executedAt).getTime() / 1000))}
+                    </span>
+                  </div>
+                )}
+                {payment.confirmedAt && !payment.executedAt && (
                   <div className="detail-row">
                     <span className="label">Confirmed:</span>
                     <span className="value">
@@ -161,21 +185,36 @@ export default function PaymentInitiated() {
                     </span>
                   </div>
                 )}
+                {payment.executionCount !== undefined && (
+                  <div className="detail-row">
+                    <span className="label">Executions:</span>
+                    <span className="value">
+                      {payment.executionCount}
+                    </span>
+                  </div>
+                )}
               </div>
 
               {payment.recipients && payment.recipients.length > 0 && (
                 <div className="recipients-list">
                   <div className="recipients-header">Recipients:</div>
-                  {payment.recipients.map((recipient: string, index: number) => (
-                    <div key={index} className="recipient-item">
-                      <span className="recipient-address">{formatAddress(recipient)}</span>
-                      {payment.amounts?.[index] && (
-                        <span className="recipient-amount">
-                          {formatUnits(payment.amounts[index], 18)} XTK
-                        </span>
-                      )}
-                    </div>
-                  ))}
+                  {payment.recipients.map((recipient: any, index: number) => {
+                    // Handle both string addresses and objects with address/amount
+                    const address = typeof recipient === 'string' ? recipient : recipient.address
+                    const amount = typeof recipient === 'string' 
+                      ? payment.amounts?.[index] 
+                      : recipient.amount
+                    return (
+                      <div key={index} className="recipient-item">
+                        <span className="recipient-address">{formatAddress(address)}</span>
+                        {amount && (
+                          <span className="recipient-amount">
+                            {formatUnits(amount, 18)} XTK
+                          </span>
+                        )}
+                      </div>
+                    )
+                  })}
                 </div>
               )}
             </div>

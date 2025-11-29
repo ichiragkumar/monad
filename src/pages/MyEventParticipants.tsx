@@ -5,9 +5,9 @@
 
 import { useState, useEffect } from 'react'
 import { useAccount } from 'wagmi'
-import { Calendar, Users, Gift, ExternalLink } from 'lucide-react'
+import { Calendar, Users, Gift } from 'lucide-react'
 import { apiService } from '@/services/api'
-import { formatAddress, formatTimestamp } from '@/utils/format'
+import { formatAddress } from '@/utils/format'
 import { formatUnits } from 'ethers'
 import './MyEventParticipants.css'
 
@@ -28,12 +28,15 @@ export default function MyEventParticipants() {
         const response = await apiService.getParticipantEvents(address || '')
         if (response.success && response.data) {
           const data = response.data as any
+          // Backend returns array of event participant objects
           if (Array.isArray(data)) {
             setEvents(data)
           } else if (data.events) {
             setEvents(data.events)
-          } else if (response.pagination) {
-            setEvents(Array.isArray(response.data) ? response.data : [])
+          } else if (response.pagination && Array.isArray(response.data)) {
+            setEvents(response.data)
+          } else {
+            setEvents([])
           }
         }
       } catch (err: any) {
@@ -92,44 +95,72 @@ export default function MyEventParticipants() {
 
       {!isLoading && events.length > 0 && (
         <div className="events-list">
-          {events.map((event) => (
-            <div key={event.id} className="event-card">
-              <div className="event-header">
-                <div className="event-info">
-                  <h3>{event.name}</h3>
-                  <span className={`status-badge ${event.status?.toLowerCase()}`}>
-                    {event.status || 'Active'}
-                  </span>
+          {events.map((eventItem) => {
+            // Backend returns event with nested event and participant objects
+            const event = eventItem.event || eventItem
+            const participant = eventItem.participant || eventItem
+            
+            return (
+              <div key={event.id || eventItem.eventId} className="event-card">
+                <div className="event-header">
+                  <div className="event-info">
+                    <h3>{event.name}</h3>
+                    <span className={`status-badge ${event.status?.toLowerCase()}`}>
+                      {event.status || 'Active'}
+                    </span>
+                  </div>
                 </div>
+
+                {event.description && (
+                  <p className="event-description">{event.description}</p>
+                )}
+
+                <div className="event-details">
+                  {event.startDate && (
+                    <div className="detail-item">
+                      <Calendar size={16} />
+                      <span>
+                        Start: {new Date(event.startDate).toLocaleDateString()}
+                        {event.endDate && ` - End: ${new Date(event.endDate).toLocaleDateString()}`}
+                      </span>
+                    </div>
+                  )}
+                  {participant.amount && (
+                    <div className="detail-item">
+                      <Gift size={16} />
+                      <span>Your Reward: {formatUnits(participant.amount, 18)} XTK</span>
+                      {participant.claimed !== undefined && (
+                        <span className={participant.claimed ? 'claimed' : 'not-claimed'}>
+                          ({participant.claimed ? 'Claimed' : 'Not Claimed'})
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  {eventItem.participantCount !== undefined && (
+                    <div className="detail-item">
+                      <Users size={16} />
+                      <span>Total Participants: {eventItem.participantCount}</span>
+                    </div>
+                  )}
+                  {eventItem.totalDistributed && (
+                    <div className="detail-item">
+                      <Gift size={16} />
+                      <span>Total Distributed: {formatUnits(eventItem.totalDistributed, 18)} XTK</span>
+                    </div>
+                  )}
+                </div>
+
+                {event.organizer && (
+                  <div className="event-organizer">
+                    <span className="label">Organized by:</span>
+                    <span className="value">
+                      {event.organizer.ensName || formatAddress(event.organizer.address)}
+                    </span>
+                  </div>
+                )}
               </div>
-
-              {event.description && (
-                <p className="event-description">{event.description}</p>
-              )}
-
-              <div className="event-details">
-                <div className="detail-item">
-                  <Calendar size={16} />
-                  <span>Event Date: {event.eventDate ? new Date(event.eventDate).toLocaleDateString() : 'TBD'}</span>
-                </div>
-                <div className="detail-item">
-                  <Gift size={16} />
-                  <span>Reward Amount: {event.amount ? formatUnits(event.amount, 18) : '0'} XTK</span>
-                </div>
-                <div className="detail-item">
-                  <Users size={16} />
-                  <span>Total Participants: {event.participantCount || 0}</span>
-                </div>
-              </div>
-
-              {event.organizer && (
-                <div className="event-organizer">
-                  <span className="label">Organized by:</span>
-                  <span className="value">{formatAddress(event.organizer.address)}</span>
-                </div>
-              )}
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
     </div>

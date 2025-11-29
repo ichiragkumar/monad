@@ -14,7 +14,7 @@ import './ProfileDropdown.css'
 export default function ProfileDropdown() {
   const { address } = useAccount()
   const { disconnect } = useDisconnect()
-  const { user, isVendor, viewAsUser, logout, requestVendorRole, toggleViewAsUser } = useAuth()
+  const { user, isVendor, logout, requestVendorRole, toggleViewAsUser } = useAuth()
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)

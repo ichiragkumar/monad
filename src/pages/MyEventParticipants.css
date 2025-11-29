@@ -169,6 +169,18 @@
   flex-shrink: 0;
 }
 
+.detail-item .claimed {
+  color: var(--status-success);
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+.detail-item .not-claimed {
+  color: var(--status-warning);
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
 .event-organizer {
   display: flex;
   align-items: center;

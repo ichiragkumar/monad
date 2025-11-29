@@ -171,9 +171,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setViewAsUser(!viewAsUser)
   }
 
-  // Show vendor dashboard only if user is vendor and not viewing as user
-  const shouldShowVendor = isVendor && !viewAsUser
-
   return (
     <AuthContext.Provider
       value={{

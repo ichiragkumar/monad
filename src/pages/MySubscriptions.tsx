@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from 'react'
 import { useAccount } from 'wagmi'
-import { Calendar, Clock, Play, Pause, X, CheckCircle } from 'lucide-react'
+import { Calendar, Clock, Pause, CheckCircle } from 'lucide-react'
 import { apiService } from '@/services/api'
 import { formatAddress, formatTimestamp } from '@/utils/format'
 import { formatUnits } from 'ethers'
