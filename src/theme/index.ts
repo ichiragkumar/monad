@@ -1,9 +1,9 @@
-import { colors, ThemeMode, ColorToken } from './colors'
+import { colors, ThemeMode } from './colors'
 
 /**
  * Get theme colors for a specific mode
  */
-export const getTheme = (mode: ThemeMode): ColorToken => colors[mode]
+export const getTheme = (mode: ThemeMode) => colors[mode]
 
 /**
  * Default theme mode (can be changed based on user preference or system)

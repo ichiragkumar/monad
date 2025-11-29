@@ -1,6 +1,15 @@
 import { createConfig, http } from 'wagmi'
 import { sepolia } from 'wagmi/chains'
-import { metaMask, walletConnect } from 'wagmi/connectors'
+import { connectorsForWallets } from '@rainbow-me/rainbowkit'
+import {
+  metaMaskWallet,
+  braveWallet,
+  phantomWallet,
+  coinbaseWallet,
+  walletConnectWallet,
+  safeWallet,
+  injectedWallet,
+} from '@rainbow-me/rainbowkit/wallets'
 
 // Monad Testnet configuration
 // Note: Update with actual Monad testnet details when available
@@ -20,26 +29,53 @@ const monadTestnet = {
   blockExplorers: {
     default: {
       name: 'Monad Explorer',
-      url: 'https://testnet-explorer.monad.xyz', // Placeholder
+      url: 'https://monad-testnet.socialscan.io/', // Placeholder
     },
   },
   testnet: true,
 } as const
 
+// Configure wallets using RainbowKit's connectorsForWallets
+const connectors = connectorsForWallets(
+  [
+    {
+      groupName: 'Recommended',
+      wallets: [
+        metaMaskWallet,
+        coinbaseWallet,
+        walletConnectWallet,
+      ],
+    },
+    {
+      groupName: 'Installed',
+      wallets: [
+        braveWallet,
+        phantomWallet,
+        injectedWallet,
+      ],
+    },
+    {
+      groupName: 'More',
+      wallets: [
+        safeWallet,
+      ],
+    },
+  ],
+  {
+    appName: 'Monad Micropayments Platform',
+    projectId: 'cb5be958d603567487c52cd49e585965',
+  }
+)
+
 export const config = createConfig({
   chains: [monadTestnet, sepolia],
-  connectors: [
-    metaMask({
-      dappMetadata: {
-        name: 'Monad Micropayments Platform',
-      },
-    }),
-    walletConnect({
-      projectId: 'cb5be958d603567487c52cd49e585965', // Replace with actual project ID
-    }),
-  ],
+  connectors,
   transports: {
-    [monadTestnet.id]: http(),
+    [monadTestnet.id]: http('https://testnet-rpc.monad.xyz', {
+      timeout: 30000, // 30 second timeout
+      retryCount: 3,
+      retryDelay: 1000,
+    }),
     [sepolia.id]: http(),
   },
 })

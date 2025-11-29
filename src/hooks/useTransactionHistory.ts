@@ -13,6 +13,11 @@ export interface Transaction {
   status: 'pending' | 'confirmed' | 'failed'
 }
 
+// Maximum block range per request (Monad RPC limit is 100)
+const MAX_BLOCK_RANGE = 100n
+// Maximum blocks to look back (last 1000 blocks = ~100 chunks)
+const MAX_LOOKBACK_BLOCKS = 1000n
+
 export function useTransactionHistory() {
   const { address } = useAccount()
   const publicClient = usePublicClient()
@@ -39,6 +44,14 @@ export function useTransactionHistory() {
       setError(null)
 
       try {
+        // Get current block number
+        const currentBlock = await publicClient.getBlockNumber()
+        
+        // Start from a reasonable recent block range (last 1000 blocks)
+        const startBlock = currentBlock > MAX_LOOKBACK_BLOCKS 
+          ? currentBlock - MAX_LOOKBACK_BLOCKS 
+          : 0n
+
         // Use the Transfer event from ERC20 ABI
         const transferEvent = {
           type: 'event',
@@ -50,76 +63,108 @@ export function useTransactionHistory() {
           ],
         } as const
 
-        // Get events where user is sender
-        const sentEvents = await publicClient.getLogs({
-          address: TOKEN_CONTRACT_ADDRESS as `0x${string}`,
-          event: transferEvent,
-          args: {
-            from: address as `0x${string}`,
-          },
-          fromBlock: 'earliest',
-        })
+        const allEvents: any[] = []
+        let fromBlock = startBlock
+        const toBlock = currentBlock
 
-        // Get events where user is receiver
-        const receivedEvents = await publicClient.getLogs({
-          address: TOKEN_CONTRACT_ADDRESS as `0x${string}`,
-          event: transferEvent,
-          args: {
-            to: address as `0x${string}`,
-          },
-          fromBlock: 'earliest',
-        })
+        // Fetch logs in chunks of MAX_BLOCK_RANGE
+        while (fromBlock <= toBlock) {
+          const chunkToBlock = fromBlock + MAX_BLOCK_RANGE - 1n > toBlock 
+            ? toBlock 
+            : fromBlock + MAX_BLOCK_RANGE - 1n
 
-        // Combine events
-        const allEvents = [...sentEvents, ...receivedEvents]
-        
+          try {
+            // Get events where user is sender
+            const sentEvents = await publicClient.getLogs({
+              address: TOKEN_CONTRACT_ADDRESS as `0x${string}`,
+              event: transferEvent,
+              args: {
+                from: address as `0x${string}`,
+              },
+              fromBlock,
+              toBlock: chunkToBlock,
+            })
+
+            // Get events where user is receiver
+            const receivedEvents = await publicClient.getLogs({
+              address: TOKEN_CONTRACT_ADDRESS as `0x${string}`,
+              event: transferEvent,
+              args: {
+                to: address as `0x${string}`,
+              },
+              fromBlock,
+              toBlock: chunkToBlock,
+            })
+
+            allEvents.push(...sentEvents, ...receivedEvents)
+          } catch (chunkError: any) {
+            // If chunk fails, log and continue with next chunk
+            console.warn(`Failed to fetch logs for blocks ${fromBlock}-${chunkToBlock}:`, chunkError.message)
+            // Continue with next chunk instead of failing completely
+          }
+
+          fromBlock = chunkToBlock + 1n
+        }
+
         // Remove duplicates by transaction hash
         const uniqueEvents = Array.from(
           new Map(allEvents.map(event => [event.transactionHash, event])).values()
         )
 
-        // Process events
-        const txPromises = uniqueEvents.map(async (event) => {
-          try {
-            const tx = await publicClient.getTransactionReceipt({
-              hash: event.transactionHash,
+        // Process events in batches to avoid overwhelming the RPC
+        const processedTransactions: Transaction[] = []
+        
+        for (let i = 0; i < uniqueEvents.length; i += 10) {
+          const batch = uniqueEvents.slice(i, i + 10)
+          
+          const batchResults = await Promise.all(
+            batch.map(async (event) => {
+              try {
+                const [tx, block] = await Promise.all([
+                  publicClient.getTransactionReceipt({ hash: event.transactionHash }),
+                  publicClient.getBlock({ blockNumber: event.blockNumber }),
+                ])
+
+                // Decode event args
+                const decoded = event.args
+                const from = decoded?.from || address
+                const to = decoded?.to || address
+                const value = decoded?.value || 0n
+
+                const isSent = from.toLowerCase() === address?.toLowerCase()
+
+                return {
+                  hash: event.transactionHash,
+                  from: typeof from === 'string' ? from : String(from).toLowerCase(),
+                  to: typeof to === 'string' ? to : String(to).toLowerCase(),
+                  value: formatUnits(value, 18),
+                  timestamp: Number(block.timestamp),
+                  type: isSent ? ('sent' as const) : ('received' as const),
+                  status: tx.status === 'success' ? ('confirmed' as const) : ('failed' as const),
+                } as Transaction
+              } catch (err) {
+                console.error('Error processing transaction:', err)
+                return null
+              }
             })
+          )
 
-            const block = await publicClient.getBlock({
-              blockNumber: tx.blockNumber,
-            })
+          processedTransactions.push(...batchResults.filter((tx): tx is Transaction => tx !== null))
+        }
 
-            // Decode event args
-            const decoded = event.args
-            const from = decoded?.from || address
-            const to = decoded?.to || address
-            const value = decoded?.value || 0n
+        // Sort by timestamp descending (most recent first)
+        processedTransactions.sort((a, b) => b.timestamp - a.timestamp)
 
-            const isSent = from.toLowerCase() === address?.toLowerCase()
-
-            return {
-              hash: event.transactionHash,
-              from: typeof from === 'string' ? from : String(from).toLowerCase(),
-              to: typeof to === 'string' ? to : String(to).toLowerCase(),
-              value: formatUnits(value, 18),
-              timestamp: Number(block.timestamp),
-              type: isSent ? 'sent' : 'received',
-              status: tx.status === 'success' ? 'confirmed' : 'failed',
-            } as Transaction
-          } catch (err) {
-            console.error('Error processing transaction:', err)
-            return null
-          }
-        })
-
-        const processedTxs = (await Promise.all(txPromises))
-          .filter((tx): tx is Transaction => tx !== null)
-          .sort((a, b) => b.timestamp - a.timestamp) // Most recent first
-
-        setTransactions(processedTxs)
+        setTransactions(processedTransactions)
       } catch (err: any) {
         console.error('Error fetching transactions:', err)
-        setError(err.message || 'Failed to fetch transaction history')
+        // Don't show error for RPC limitations, just use localStorage
+        if (err.message?.includes('limited to') || err.message?.includes('413') || err.status === 413) {
+          console.warn('RPC block range limit reached, using cached transactions')
+          setError(null) // Don't show error for known RPC limitations
+        } else {
+          setError(err.message || 'Failed to fetch transaction history')
+        }
         
         // Fallback to localStorage if available
         const stored = localStorage.getItem(`transactions-${address}`)
@@ -137,8 +182,8 @@ export function useTransactionHistory() {
 
     fetchTransactions()
 
-    // Refresh every 30 seconds
-    const interval = setInterval(fetchTransactions, 30000)
+    // Refresh every 60 seconds (reduced frequency to avoid RPC rate limits)
+    const interval = setInterval(fetchTransactions, 60000)
 
     return () => clearInterval(interval)
   }, [address, publicClient])

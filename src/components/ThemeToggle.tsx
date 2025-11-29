@@ -3,7 +3,7 @@ import { useTheme } from '@/hooks/useTheme'
 import './ThemeToggle.css'
 
 export default function ThemeToggle() {
-  const { theme, toggleTheme, isDark } = useTheme()
+  const { toggleTheme, isDark } = useTheme()
 
   return (
     <button

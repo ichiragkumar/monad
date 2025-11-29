@@ -22,7 +22,14 @@ function App() {
     <ErrorBoundary>
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
-          <RainbowKitProvider>
+          <RainbowKitProvider
+            modalSize="wide"
+            showRecentTransactions={true}
+            appInfo={{
+              appName: 'Monad Micropayments Platform',
+              learnMoreUrl: 'https://monad.xyz',
+            }}
+          >
             <Router>
               <ScrollToTop />
               <Layout>

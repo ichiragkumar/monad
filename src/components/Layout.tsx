@@ -13,7 +13,6 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const location = useLocation()
   const { isConnected } = useAccount()
-  const isLandingPage = location.pathname === '/' && !isConnected
 
   return (
     <div className="layout">
