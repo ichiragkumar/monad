@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="footer-section">
           <h3>About Us</h3>
           <p>
-            MonadPay is a cutting-edge micropayments and loyalty rewards platform
+          PayMint is a cutting-edge micropayments and loyalty rewards platform
             built on Monad blockchain. We enable instant, low-cost transactions
             and tokenized rewards for businesses and individuals.
           </p>
@@ -46,9 +46,9 @@ export default function Footer() {
           <h3>Contact Us</h3>
           <ul>
             <li>
-              <a href="mailto:support@monadpay.io">
+              <a href="mailto:support@PayMint.io">
                 <Mail size={16} />
-                support@monadpay.io
+                support@PayMint.io
               </a>
             </li>
             <li>
@@ -62,7 +62,7 @@ export default function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <p>&copy; 2024 MonadPay. All rights reserved. Built on Monad Blockchain.</p>
+        <p>&copy; 2024 PayMint. All rights reserved. Built on Monad Blockchain.</p>
       </div>
     </footer>
   )

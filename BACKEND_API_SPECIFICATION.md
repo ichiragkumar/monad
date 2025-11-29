@@ -31,7 +31,7 @@ This document specifies all backend API endpoints required for the Monad Micropa
 {
   "walletAddress": "0x...",
   "signature": "0x...", // EIP-712 signature for authentication
-  "message": "Sign in to MonadPay...",
+  "message": "Sign in to PayMint...",
   "timestamp": 1234567890
 }
 ```

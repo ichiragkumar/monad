@@ -22,7 +22,7 @@ export default function Privacy() {
           </div>
           <div className="section-content">
             <p>
-              MonadPay is built on the principle of user sovereignty. We implement industry-leading security measures to protect your personal information and transaction data.
+            PayMint is built on the principle of user sovereignty. We implement industry-leading security measures to protect your personal information and transaction data.
             </p>
             <ul>
               <li><strong>Non-Custodial Wallets:</strong> You maintain full control of your private keys and funds. We never have access to your wallet or tokens.</li>
@@ -59,7 +59,7 @@ export default function Privacy() {
           </div>
           <div className="section-content">
             <p>
-              MonadPay leverages the security of the Monad blockchain, which provides:
+            PayMint leverages the security of the Monad blockchain, which provides:
             </p>
             <ul>
               <li><strong>Immutable Records:</strong> All transactions are permanently recorded on-chain</li>
@@ -94,7 +94,7 @@ export default function Privacy() {
           </div>
           <div className="section-content">
             <p>
-              MonadPay integrates with third-party services for wallet connections (MetaMask, WalletConnect). 
+            PayMint integrates with third-party services for wallet connections (MetaMask, WalletConnect). 
               These services have their own privacy policies. We recommend reviewing their privacy practices.
             </p>
             <p>
@@ -111,7 +111,7 @@ export default function Privacy() {
           <div className="section-content">
             <p>
               We may update this Privacy & Security policy from time to time. We will notify users of any material changes 
-              through our platform or via email. Your continued use of MonadPay after such changes constitutes acceptance of the updated policy.
+              through our platform or via email. Your continued use of PayMint after such changes constitutes acceptance of the updated policy.
             </p>
             <p className="last-updated">
               <strong>Last Updated:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
@@ -129,7 +129,7 @@ export default function Privacy() {
               If you have questions about our Privacy & Security practices, please contact us:
             </p>
             <p>
-              <strong>Email:</strong> <a href="mailto:privacy@monadpay.io">privacy@monadpay.io</a>
+              <strong>Email:</strong> <a href="mailto:privacy@PayMint.io">privacy@PayMint.io</a>
             </p>
           </div>
         </section>

@@ -10,7 +10,7 @@ export default function Terms() {
         </div>
         <h1 className="hero-title">Terms & Conditions</h1>
         <p className="hero-subtitle">
-          Please read these terms carefully before using MonadPay. By using our platform, you agree to be bound by these terms.
+          Please read these terms carefully before using PayMint. By using our platform, you agree to be bound by these terms.
         </p>
       </section>
 
@@ -22,7 +22,7 @@ export default function Terms() {
           </div>
           <div className="section-content">
             <p>
-              By accessing and using MonadPay, you accept and agree to be bound by the terms and provision of this agreement. 
+              By accessing and using PayMint, you accept and agree to be bound by the terms and provision of this agreement. 
               If you do not agree to these terms, you should not use our services.
             </p>
             <p>
@@ -39,7 +39,7 @@ export default function Terms() {
           <div className="section-content">
             <p><strong>You agree to:</strong></p>
             <ul>
-              <li>Use MonadPay only for lawful purposes and in accordance with these Terms</li>
+              <li>Use PayMint only for lawful purposes and in accordance with these Terms</li>
               <li>Maintain the security of your wallet and private keys</li>
               <li>Provide accurate information when using our services</li>
               <li>Comply with all applicable laws and regulations</li>
@@ -76,7 +76,7 @@ export default function Terms() {
           </div>
           <div className="section-content">
             <p>
-              <strong>Non-Custodial Service:</strong> MonadPay is a non-custodial platform. We do not hold, store, or have access to your funds or private keys. 
+              <strong>Non-Custodial Service:</strong> PayMint is a non-custodial platform. We do not hold, store, or have access to your funds or private keys. 
               You are solely responsible for the security of your wallet and private keys.
             </p>
             <p>
@@ -104,8 +104,8 @@ export default function Terms() {
           </div>
           <div className="section-content">
             <p>
-              All content, features, and functionality of MonadPay, including but not limited to text, graphics, logos, and software, 
-              are the property of MonadPay and are protected by international copyright, trademark, and other intellectual property laws.
+              All content, features, and functionality of PayMint, including but not limited to text, graphics, logos, and software, 
+              are the property of PayMint and are protected by international copyright, trademark, and other intellectual property laws.
             </p>
             <p>
               You may not reproduce, distribute, modify, or create derivative works from any part of the platform without our express written permission.
@@ -121,7 +121,7 @@ export default function Terms() {
           <div className="section-content">
             <p>
               We reserve the right to modify these Terms & Conditions at any time. We will notify users of any material changes 
-              through our platform or via email. Your continued use of MonadPay after such modifications constitutes acceptance of the updated terms.
+              through our platform or via email. Your continued use of PayMint after such modifications constitutes acceptance of the updated terms.
             </p>
             <p>
               It is your responsibility to review these terms periodically for changes.
@@ -139,7 +139,7 @@ export default function Terms() {
               These Terms & Conditions shall be governed by and construed in accordance with applicable laws, without regard to conflict of law provisions.
             </p>
             <p>
-              Any disputes arising from these terms or your use of MonadPay shall be resolved through appropriate legal channels.
+              Any disputes arising from these terms or your use of PayMint shall be resolved through appropriate legal channels.
             </p>
           </div>
         </section>
@@ -154,7 +154,7 @@ export default function Terms() {
               If you have any questions about these Terms & Conditions, please contact us:
             </p>
             <p>
-              <strong>Email:</strong> <a href="mailto:legal@monadpay.io">legal@monadpay.io</a>
+              <strong>Email:</strong> <a href="mailto:legal@PayMint.io">legal@PayMint.io</a>
             </p>
             <p className="last-updated">
               <strong>Last Updated:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}

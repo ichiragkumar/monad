@@ -114,7 +114,7 @@ headers['Authorization'] = `Bearer ${token}`
 ### New (EIP-712):
 ```typescript
 // Sign message on each request
-const message = `Sign in to MonadPay\n\nTimestamp: ${timestamp}`
+const message = `Sign in to PayMint\n\nTimestamp: ${timestamp}`
 const signature = await signMessageAsync({ message })
 // Send signature with request
 ```

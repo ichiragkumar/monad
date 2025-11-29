@@ -15,6 +15,10 @@ import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import PaymentLinkHandler from './components/PaymentLinkHandler'
 import Analytics from './pages/Analytics'
+import MySubscriptions from './pages/MySubscriptions'
+import MyEventParticipants from './pages/MyEventParticipants'
+import NextPayments from './pages/NextPayments'
+import PaymentInitiated from './pages/PaymentInitiated'
 import '@rainbow-me/rainbowkit/styles.css'
 import './App.css'
 
@@ -73,6 +77,38 @@ function App() {
                     <Route path="/privacy" element={<Privacy />} />
                     <Route path="/terms" element={<Terms />} />
                     <Route path="/approve-payment" element={<PaymentLinkHandler />} />
+                    <Route
+                      path="/subscriptions"
+                      element={
+                        <ProtectedRoute>
+                          <MySubscriptions />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/my-events"
+                      element={
+                        <ProtectedRoute>
+                          <MyEventParticipants />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/next-payments"
+                      element={
+                        <ProtectedRoute>
+                          <NextPayments />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/payment-initiated"
+                      element={
+                        <ProtectedRoute>
+                          <PaymentInitiated />
+                        </ProtectedRoute>
+                      }
+                    />
                   </Routes>
                 </Layout>
               </Router>

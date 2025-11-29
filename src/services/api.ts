@@ -401,6 +401,110 @@ class ApiService {
       body: JSON.stringify({ metrics }),
     })
   }
+
+  // Vendor Requests
+  async requestVendorRole(
+    walletAddress: string,
+    businessName: string,
+    description?: string,
+    website?: string,
+    signature?: string,
+    message?: string,
+    timestamp?: number
+  ) {
+    return this.request<any>(API_ENDPOINTS.USERS.REQUEST_VENDOR(walletAddress), {
+      method: 'POST',
+      body: JSON.stringify({
+        walletAddress,
+        businessName,
+        description,
+        website,
+        signature,
+        message,
+        timestamp,
+      }),
+    })
+  }
+
+  // Subscriptions (for subscriber) - Updated to support status filter
+  async getSubscriptionsForUser(
+    walletAddress: string,
+    params?: {
+      status?: 'active' | 'paused' | 'cancelled'
+      page?: number
+      limit?: number
+    }
+  ) {
+    const queryParams = new URLSearchParams()
+    queryParams.append('walletAddress', walletAddress)
+    if (params?.status) queryParams.append('status', params.status)
+    if (params?.page) queryParams.append('page', params.page.toString())
+    if (params?.limit) queryParams.append('limit', params.limit.toString())
+
+    return this.request<PaginatedResponse<any>>(
+      `${API_ENDPOINTS.SUBSCRIPTIONS.LIST}?${queryParams.toString()}`,
+      { method: 'GET' }
+    )
+  }
+
+  // Event Participants (for user)
+  async getParticipantEvents(
+    walletAddress: string,
+    params?: {
+      status?: 'draft' | 'active' | 'completed'
+      page?: number
+      limit?: number
+    }
+  ) {
+    const queryParams = new URLSearchParams()
+    if (params?.status) queryParams.append('status', params.status)
+    if (params?.page) queryParams.append('page', params.page.toString())
+    if (params?.limit) queryParams.append('limit', params.limit.toString())
+
+    return this.request<PaginatedResponse<any>>(
+      `${API_ENDPOINTS.EVENTS.GET_PARTICIPANT(walletAddress)}?${queryParams.toString()}`,
+      { method: 'GET' }
+    )
+  }
+
+  // Next Payments
+  async getNextPayments(
+    walletAddress: string,
+    params?: {
+      days?: number
+      limit?: number
+    }
+  ) {
+    const queryParams = new URLSearchParams()
+    queryParams.append('walletAddress', walletAddress)
+    if (params?.days) queryParams.append('days', params.days.toString())
+    if (params?.limit) queryParams.append('limit', params.limit.toString())
+
+    return this.request<any>(
+      `${API_ENDPOINTS.SUBSCRIPTIONS.NEXT_PAYMENTS}?${queryParams.toString()}`,
+      { method: 'GET' }
+    )
+  }
+
+  // Payment Links (initiated by user)
+  async getInitiatedPaymentLinks(
+    walletAddress: string,
+    params?: {
+      status?: 'all' | 'pending' | 'executed' | 'expired'
+      page?: number
+      limit?: number
+    }
+  ) {
+    const queryParams = new URLSearchParams()
+    if (params?.status) queryParams.append('status', params.status)
+    if (params?.page) queryParams.append('page', params.page.toString())
+    if (params?.limit) queryParams.append('limit', params.limit.toString())
+
+    return this.request<PaginatedResponse<any>>(
+      `${API_ENDPOINTS.PAYMENT_LINKS.GET_INITIATED(walletAddress)}?${queryParams.toString()}`,
+      { method: 'GET' }
+    )
+  }
 }
 
 export const apiService = new ApiService()

@@ -12,6 +12,7 @@ interface User {
   userId: string
   walletAddress: string
   ensName: string | null
+  role?: 'USER' | 'VENDOR'
   createdAt: string
   lastSeenAt: string
   profile?: {
@@ -25,9 +26,12 @@ interface AuthContextType {
   isLoading: boolean
   isAuthenticated: boolean
   isVendor: boolean
+  viewAsUser: boolean
   login: () => Promise<void>
   logout: () => void
   refreshUser: () => Promise<void>
+  requestVendorRole: () => Promise<void>
+  toggleViewAsUser: () => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -36,7 +40,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const { address, isConnected } = useAccount()
   const { signMessageAsync } = useSignMessage()
   const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(false) // Start as false, set true only when needed
+  const [isLoading, setIsLoading] = useState(false)
+  const [viewAsUser, setViewAsUser] = useState(false) // Toggle to view as user even if vendor
 
   const login = async () => {
     if (!address || !isConnected) return
@@ -46,7 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // Create EIP-712 message for authentication
       const timestamp = Math.floor(Date.now() / 1000)
-      const message = `Sign in to MonadPay\n\nTimestamp: ${timestamp}\nAddress: ${address}`
+      const message = `Sign in to PayMint\n\nTimestamp: ${timestamp}\nAddress: ${address}`
 
       // Sign message
       const signature = await signMessageAsync({ message })
@@ -65,6 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           userId: userData.userId || userData.id || '',
           walletAddress: userData.walletAddress || userData.address || address || '',
           ensName: userData.ensName || null,
+          role: userData.role || 'USER',
           createdAt: userData.createdAt || new Date().toISOString(),
           lastSeenAt: userData.lastSeenAt || userData.createdAt || new Date().toISOString(),
           profile: userData.profile,
@@ -93,6 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           userId: userData.userId || userData.id || '',
           walletAddress: userData.walletAddress || userData.address || address || '',
           ensName: userData.ensName || null,
+          role: userData.role || 'USER',
           createdAt: userData.createdAt || new Date().toISOString(),
           lastSeenAt: userData.lastSeenAt || userData.createdAt || new Date().toISOString(),
           profile: userData.profile,
@@ -120,8 +127,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [isConnected, address])
 
-  // Determine if user is vendor (can be based on role or other criteria)
-  const isVendor = false // TODO: Add vendor role check when backend supports it
+  // Determine if user is vendor based on role from backend
+  const isVendor = user?.role === 'VENDOR'
+
+  const requestVendorRole = async () => {
+    if (!address) return
+    
+    try {
+      // Prompt user for business details
+      const businessName = prompt('Enter your business name:')
+      if (!businessName) return
+
+      const description = prompt('Enter business description (optional):') || undefined
+      const website = prompt('Enter website URL (optional):') || undefined
+
+      // Create EIP-712 message for vendor request
+      const timestamp = Math.floor(Date.now() / 1000)
+      const message = `Request vendor role for MonadPay\n\nBusiness: ${businessName}\nTimestamp: ${timestamp}\nAddress: ${address}`
+
+      // Sign message
+      const signature = await signMessageAsync({ message })
+
+      // Submit vendor request
+      await apiService.requestVendorRole(
+        address,
+        businessName,
+        description,
+        website,
+        signature,
+        message,
+        timestamp
+      )
+
+      alert('Vendor role request submitted! We will review your request.')
+      await refreshUser() // Refresh to check if role was updated
+    } catch (error) {
+      console.error('Error requesting vendor role:', error)
+      alert('Failed to submit vendor request. Please try again.')
+    }
+  }
+
+  const toggleViewAsUser = () => {
+    setViewAsUser(!viewAsUser)
+  }
+
+  // Show vendor dashboard only if user is vendor and not viewing as user
+  const shouldShowVendor = isVendor && !viewAsUser
 
   return (
     <AuthContext.Provider
@@ -130,9 +181,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         isAuthenticated: !!user,
         isVendor,
+        viewAsUser,
         login,
         logout,
         refreshUser,
+        requestVendorRole,
+        toggleViewAsUser,
       }}
     >
       {children}
