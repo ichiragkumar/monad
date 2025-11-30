@@ -1,8 +1,9 @@
-import { useState } from 'react'
-import { X, Plus, Upload } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { X, Plus, Upload, Loader2 } from 'lucide-react'
 import { Participant } from '@/types'
 import { formatAddress } from '@/utils/format'
 import { isValidENSName as validateENS } from '@/utils/ens'
+import { useWhitelist } from '@/hooks/useWhitelist'
 import './ParticipantManager.css'
 
 interface ParticipantManagerProps {
@@ -17,18 +18,38 @@ interface ParticipantManagerProps {
 export default function ParticipantManager({
   isOpen,
   onClose,
-  eventId: _eventId,
-  participants,
-  onAddParticipants,
-  onRemoveParticipant,
+  eventId,
+  participants: _initialParticipants,
+  onAddParticipants: _onAddParticipants,
+  onRemoveParticipant: _onRemoveParticipant,
 }: ParticipantManagerProps) {
   const [newAddress, setNewAddress] = useState('')
   const [csvInput, setCsvInput] = useState('')
   const [showCsvInput, setShowCsvInput] = useState(false)
+  
+  // Use the whitelist hook to fetch and manage participants
+  const { whitelist, isLoading, error, fetchWhitelist, addWhitelist, uploadWhitelist } = useWhitelist(
+    isOpen ? eventId : null
+  )
+
+  // Fetch participants when modal opens
+  useEffect(() => {
+    if (isOpen && eventId) {
+      fetchWhitelist()
+    }
+  }, [isOpen, eventId, fetchWhitelist])
+
+  // Convert whitelist to participants format
+  const participants: Participant[] = whitelist.map(entry => ({
+    address: entry.address,
+    ensName: entry.ensName || undefined,
+    amount: entry.amount,
+    claimed: entry.claimed,
+  }))
 
   if (!isOpen) return null
 
-  const handleAddSingle = () => {
+  const handleAddSingle = async () => {
     if (!newAddress.trim()) return
 
     const address = newAddress.trim()
@@ -44,24 +65,31 @@ export default function ParticipantManager({
       return
     }
 
-    onAddParticipants([address])
-    setNewAddress('')
+    try {
+      await addWhitelist([address])
+      setNewAddress('')
+      // Participants will be automatically refreshed by the hook
+    } catch (err: any) {
+      alert(err.message || 'Failed to add participant')
+    }
   }
 
-  const handleAddBulk = () => {
+  const handleAddBulk = async () => {
     if (!csvInput.trim()) return
 
     const lines = csvInput.split('\n').map(line => line.trim()).filter(line => line)
     const addresses: string[] = []
+    const amounts: string[] = []
 
     for (const line of lines) {
       // Support CSV format: address or address,amount
-      const parts = line.split(',')
-      const address = parts[0].trim()
+      const parts = line.split(',').map(p => p.trim())
+      const address = parts[0]
       
       if (address.startsWith('0x') || validateENS(address)) {
         if (!participants.some(p => p.address.toLowerCase() === address.toLowerCase())) {
           addresses.push(address)
+          amounts.push(parts[1] || '0') // Amount if provided
         }
       }
     }
@@ -71,9 +99,14 @@ export default function ParticipantManager({
       return
     }
 
-    onAddParticipants(addresses)
-    setCsvInput('')
-    setShowCsvInput(false)
+    try {
+      await addWhitelist(addresses, amounts.length > 0 ? amounts : undefined)
+      setCsvInput('')
+      setShowCsvInput(false)
+      // Participants will be automatically refreshed by the hook
+    } catch (err: any) {
+      alert(err.message || 'Failed to add participants')
+    }
   }
 
   return (
@@ -142,12 +175,31 @@ export default function ParticipantManager({
           {/* Participants List */}
           <div className="participants-list-section">
             <h3>Participants ({participants.length})</h3>
-            {participants.length === 0 ? (
+            
+            {isLoading && (
+              <div className="loading-participants">
+                <Loader2 className="spinner" size={20} />
+                <span>Loading participants...</span>
+              </div>
+            )}
+
+            {error && (
+              <div className="error-participants">
+                <p>Error loading participants: {error}</p>
+                <button className="btn btn-secondary btn-sm" onClick={() => fetchWhitelist()}>
+                  Retry
+                </button>
+              </div>
+            )}
+
+            {!isLoading && !error && participants.length === 0 && (
               <div className="empty-participants">
                 <p>No participants added yet</p>
                 <p className="empty-note">Add addresses or ENS names above</p>
               </div>
-            ) : (
+            )}
+
+            {!isLoading && !error && participants.length > 0 && (
               <div className="participants-list">
                 {participants.map((participant, index) => (
                   <div key={index} className="participant-item">
@@ -155,15 +207,23 @@ export default function ParticipantManager({
                       <span className="participant-address">
                         {participant.ensName || formatAddress(participant.address)}
                       </span>
-                      {participant.amount && (
+                      {participant.amount && participant.amount !== '0' && (
                         <span className="participant-amount">
                           {participant.amount} XTK
                         </span>
                       )}
+                      {participant.claimed && (
+                        <span className="claimed-badge">Claimed</span>
+                      )}
                     </div>
                     <button
                       className="remove-button"
-                      onClick={() => onRemoveParticipant(participant.address)}
+                      onClick={async () => {
+                        // Note: Backend v1 doesn't have remove participant endpoint yet
+                        // For now, just show a message
+                        alert('Remove participant feature coming soon. Backend API needs to be implemented.')
+                        // await removeEntry(participant.id) // When backend supports it
+                      }}
                     >
                       <X size={16} />
                     </button>

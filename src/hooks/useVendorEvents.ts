@@ -7,19 +7,22 @@ import { useAccount } from 'wagmi'
 import { apiService } from '@/services/api'
 
 export interface BackendEvent {
-  id: string
+  id?: string
+  eventId?: string // Backend may return eventId instead of id
   name: string
   description: string
-  status: 'DRAFT' | 'ACTIVE' | 'COMPLETED'
-  organizer: {
+  status: 'DRAFT' | 'ACTIVE' | 'COMPLETED' | 'draft' | 'active' | 'completed'
+  organizer?: {
     address: string
     ensName: string | null
   }
-  tokenBudget: string
-  startDate: string | null
-  endDate: string | null
-  whitelistCount: number
-  airdropCount: number
+  tokenBudget?: string
+  totalDistributed?: string
+  startDate?: string | null
+  endDate?: string | null
+  whitelistCount?: number
+  participantCount?: number
+  airdropCount?: number
   createdAt: string
 }
 

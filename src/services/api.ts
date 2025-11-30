@@ -224,7 +224,9 @@ class ApiService {
     vendorAddress: string
     name: string
     description: string
-    eventDate?: string
+    startDate?: string
+    endDate?: string
+    tokenBudget?: string
     status?: 'draft' | 'active' | 'completed'
     metadata?: any
   }) {

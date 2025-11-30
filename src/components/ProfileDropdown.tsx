@@ -87,12 +87,12 @@ export default function ProfileDropdown() {
       >
         <div className="profile-avatar">
           {user.profile?.displayName?.[0]?.toUpperCase() || 
-           user.walletAddress.slice(2, 3).toUpperCase()}
+           (user.walletAddress && user.walletAddress.length > 2 ? user.walletAddress.slice(2, 3).toUpperCase() : 'U')}
         </div>
         <span className="profile-name">
           {user.profile?.displayName || 
            user.ensName || 
-           `${user.walletAddress.slice(0, 6)}...${user.walletAddress.slice(-4)}`}
+           (user.walletAddress ? `${user.walletAddress.slice(0, 6)}...${user.walletAddress.slice(-4)}` : 'User')}
         </span>
         <ChevronDown size={16} className={`chevron ${isOpen ? 'open' : ''}`} />
       </button>
@@ -103,14 +103,14 @@ export default function ProfileDropdown() {
             <div className="profile-info">
               <div className="profile-avatar-large">
                 {user.profile?.displayName?.[0]?.toUpperCase() || 
-                 user.walletAddress.slice(2, 3).toUpperCase()}
+                 (user.walletAddress && user.walletAddress.length > 2 ? user.walletAddress.slice(2, 3).toUpperCase() : 'U')}
               </div>
               <div className="profile-details">
                 <div className="profile-display-name">
                   {user.profile?.displayName || 'User'}
                 </div>
                 <div className="profile-address">
-                  {user.ensName || formatAddress(user.walletAddress, 10, 8)}
+                  {user.ensName || (user.walletAddress ? formatAddress(user.walletAddress, 10, 8) : 'No address')}
                 </div>
                 {isVendor && (
                   <div className="profile-badge vendor">

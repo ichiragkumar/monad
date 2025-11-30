@@ -1,47 +1,82 @@
 import { useState, useMemo } from 'react'
 import { useAccount } from 'wagmi'
-import { Gift, Users, Plus, Send } from 'lucide-react'
-import { Event, Participant } from '@/types'
+import { Gift, Users, Plus, Send, Loader2 } from 'lucide-react'
+import { Event } from '@/types'
 import CreateEventModal from '@/components/CreateEventModal'
 import EventCard from '@/components/EventCard'
 import ParticipantManager from '@/components/ParticipantManager'
 import DistributionModal from '@/components/DistributionModal'
+import { useVendorEvents, BackendEvent } from '@/hooks/useVendorEvents'
 import './VendorDashboard.css'
 
 export default function VendorDashboard() {
-  const { isConnected, address } = useAccount()
-  const [events, setEvents] = useState<Event[]>([])
+  const { isConnected } = useAccount()
+  const { events: backendEvents, isLoading, error, createEvent, refetch } = useVendorEvents()
   const [showCreateEvent, setShowCreateEvent] = useState(false)
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null)
   const [showParticipantManager, setShowParticipantManager] = useState(false)
   const [showDistribution, setShowDistribution] = useState(false)
 
+  // Convert backend events to frontend Event format
+  const events: Event[] = useMemo(() => {
+    if (!backendEvents || !Array.isArray(backendEvents)) {
+      return []
+    }
+    return backendEvents
+      .filter((backendEvent): backendEvent is BackendEvent => !!backendEvent)
+      .map((backendEvent: BackendEvent) => ({
+        id: backendEvent.id || (backendEvent as any).eventId || '', // Handle both id and eventId
+        name: backendEvent.name || '',
+        description: backendEvent.description || '',
+        owner: backendEvent.organizer?.address || '',
+        createdAt: backendEvent.createdAt 
+          ? Math.floor(new Date(backendEvent.createdAt).getTime() / 1000)
+          : Math.floor(Date.now() / 1000),
+        participants: [], // Will be loaded separately when needed
+        totalDistributed: backendEvent.tokenBudget || (backendEvent as any).totalDistributed || '0',
+        status: (backendEvent.status?.toLowerCase() || 'draft') as 'draft' | 'active' | 'completed',
+      }))
+  }, [backendEvents])
+
   // Calculate stats
   const stats = useMemo(() => {
+    if (!backendEvents || !Array.isArray(backendEvents)) {
+      return { totalEvents: 0, totalParticipants: 0, totalDistributed: 0 }
+    }
     const totalEvents = events.length
-    const totalParticipants = events.reduce((sum, event) => sum + event.participants.length, 0)
-    const totalDistributed = events.reduce((sum, event) => {
-      return sum + parseFloat(event.totalDistributed || '0')
-    }, 0)
+    const totalParticipants = backendEvents
+      .filter((e): e is BackendEvent => !!e)
+      .reduce((sum, event) => sum + (event.whitelistCount || event.participantCount || 0), 0)
+    const totalDistributed = backendEvents
+      .filter((e): e is BackendEvent => !!e)
+      .reduce((sum, event) => {
+        const amount = event.tokenBudget || event.totalDistributed || '0'
+        return sum + parseFloat(amount)
+      }, 0)
 
     return { totalEvents, totalParticipants, totalDistributed }
-  }, [events])
+  }, [events, backendEvents])
 
   const selectedEvent = selectedEventId 
     ? events.find(e => e.id === selectedEventId)
     : null
 
-  const handleCreateEvent = (eventData: Omit<Event, 'id' | 'createdAt' | 'participants' | 'totalDistributed' | 'status'>) => {
-    const newEvent: Event = {
-      id: `event-${Date.now()}`,
-      ...eventData,
-      owner: address || '',
-      createdAt: Math.floor(Date.now() / 1000),
-      participants: [],
-      totalDistributed: '0',
-      status: 'draft',
+  const handleCreateEvent = async (eventData: Omit<Event, 'id' | 'createdAt' | 'participants' | 'totalDistributed' | 'status'>) => {
+    try {
+      // Convert frontend event data to backend format
+      await createEvent({
+        name: eventData.name,
+        description: eventData.description || '',
+        startDate: eventData.startDate ? new Date(eventData.startDate * 1000).toISOString() : undefined,
+        endDate: eventData.endDate ? new Date(eventData.endDate * 1000).toISOString() : undefined,
+        tokenBudget: '0', // Can be set later or added to form
+      })
+      // Events will be automatically refetched by the hook
+      setShowCreateEvent(false)
+    } catch (err: any) {
+      console.error('Error creating event:', err)
+      alert(err.message || 'Failed to create event')
     }
-    setEvents([...events, newEvent])
   }
 
   const handleManageParticipants = (eventId: string) => {
@@ -49,40 +84,20 @@ export default function VendorDashboard() {
     setShowParticipantManager(true)
   }
 
-  const handleAddParticipants = (addresses: string[]) => {
-    if (!selectedEventId) return
-
-    setEvents(events.map(event => {
-      if (event.id === selectedEventId) {
-        const newParticipants: Participant[] = addresses.map(addr => ({
-          address: addr,
-          claimed: false,
-        }))
-        // Avoid duplicates
-        const existingAddresses = new Set(event.participants)
-        const uniqueNew = newParticipants.filter(p => !existingAddresses.has(p.address))
-        return {
-          ...event,
-          participants: [...event.participants, ...uniqueNew.map(p => p.address)],
-          status: event.status === 'draft' ? 'active' : event.status,
-        }
-      }
-      return event
-    }))
+  const handleAddParticipants = (_addresses: string[]) => {
+    // This will be handled by ParticipantManager component which calls the API
+    // Just refresh events after participants are added
+    if (selectedEventId) {
+      refetch()
+    }
   }
 
-  const handleRemoveParticipant = (address: string) => {
-    if (!selectedEventId) return
-
-    setEvents(events.map(event => {
-      if (event.id === selectedEventId) {
-        return {
-          ...event,
-          participants: event.participants.filter(addr => addr.toLowerCase() !== address.toLowerCase()),
-        }
-      }
-      return event
-    }))
+  const handleRemoveParticipant = (_address: string) => {
+    // This will be handled by ParticipantManager component which calls the API
+    // Just refresh events after participant is removed
+    if (selectedEventId) {
+      refetch()
+    }
   }
 
   const handleDistribute = (eventId: string) => {
@@ -91,19 +106,9 @@ export default function VendorDashboard() {
   }
 
   const handleDistributionSuccess = () => {
-    // Update event with distribution info
-    // In production, this would fetch actual transaction data
+    // Refresh events after distribution
     if (selectedEventId) {
-      setEvents(events.map(event => {
-        if (event.id === selectedEventId) {
-          // Update total distributed (in production, calculate from actual tx)
-          return {
-            ...event,
-            status: 'completed',
-          }
-        }
-        return event
-      }))
+      refetch()
     }
   }
 
@@ -163,7 +168,24 @@ export default function VendorDashboard() {
 
       <div className="events-section">
         <h2>Your Events & Programs</h2>
-        {events.length === 0 ? (
+        
+        {isLoading && (
+          <div className="loading-state">
+            <Loader2 className="spinner" size={32} />
+            <p>Loading events...</p>
+          </div>
+        )}
+
+        {error && (
+          <div className="error-message">
+            <p>Error loading events: {error}</p>
+            <button className="btn btn-secondary" onClick={() => refetch()}>
+              Retry
+            </button>
+          </div>
+        )}
+
+        {!isLoading && !error && events.length === 0 && (
           <div className="empty-state">
             <Gift size={48} />
             <p>No events created yet</p>
@@ -177,7 +199,9 @@ export default function VendorDashboard() {
               Create Event
             </button>
           </div>
-        ) : (
+        )}
+
+        {!isLoading && !error && events.length > 0 && (
           <div className="events-list">
             {events.map(event => (
               <EventCard
@@ -197,38 +221,28 @@ export default function VendorDashboard() {
         onCreate={handleCreateEvent}
       />
 
-      {selectedEvent && (
-        <>
-          <ParticipantManager
-            isOpen={showParticipantManager}
-            onClose={() => {
-              setShowParticipantManager(false)
-              setSelectedEventId(null)
-            }}
-            eventId={selectedEvent.id}
-            participants={selectedEvent.participants.map(addr => ({
-              address: addr,
-              claimed: false,
-            }))}
-            onAddParticipants={handleAddParticipants}
-            onRemoveParticipant={handleRemoveParticipant}
-          />
+      <ParticipantManager
+        isOpen={showParticipantManager}
+        onClose={() => {
+          setShowParticipantManager(false)
+          setSelectedEventId(null)
+        }}
+        eventId={selectedEventId || ''}
+        participants={[]} // Will be loaded by ParticipantManager from API
+        onAddParticipants={handleAddParticipants}
+        onRemoveParticipant={handleRemoveParticipant}
+      />
 
-          <DistributionModal
-            isOpen={showDistribution}
-            onClose={() => {
-              setShowDistribution(false)
-              setSelectedEventId(null)
-            }}
-            eventId={selectedEvent.id}
-            participants={selectedEvent.participants.map(addr => ({
-              address: addr,
-              claimed: false,
-            }))}
-            onSuccess={handleDistributionSuccess}
-          />
-        </>
-      )}
+      <DistributionModal
+        isOpen={showDistribution}
+        onClose={() => {
+          setShowDistribution(false)
+          setSelectedEventId(null)
+        }}
+        eventId={selectedEventId || ''}
+        participants={[]} // Will be loaded by DistributionModal from API
+        onSuccess={handleDistributionSuccess}
+      />
     </div>
   )
 }

@@ -1,4 +1,36 @@
 /* Distribution Modal - Fully Responsive */
+
+.loading-participants {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 1rem;
+  color: var(--text-muted);
+}
+
+.loading-participants .spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.empty-participants {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+}
+
+.empty-note {
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+/* Distribution Modal - Fully Responsive */
 .modal-overlay {
   position: fixed;
   top: 0;

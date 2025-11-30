@@ -2,7 +2,6 @@ import { Link, useLocation } from 'react-router-dom'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useAccount } from 'wagmi'
 import { Wallet } from 'lucide-react'
-import { useAuth } from '@/contexts/AuthContext'
 import ThemeToggle from './ThemeToggle'
 import ProfileDropdown from './ProfileDropdown'
 import Footer from './Footer'
@@ -15,8 +14,6 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const location = useLocation()
   const { isConnected } = useAccount()
-  const { isVendor, viewAsUser } = useAuth()
-  const shouldShowVendor = isVendor && !viewAsUser
 
   return (
     <div className="layout">
@@ -55,14 +52,12 @@ export default function Layout({ children }: LayoutProps) {
                   >
                     Wallet
                   </Link>
-                  {shouldShowVendor && (
-                    <Link
-                      to="/vendor"
-                      className={location.pathname === '/vendor' ? 'active' : ''}
-                    >
-                      Vendor Dashboard
-                    </Link>
-                  )}
+                  <Link
+                    to="/vendor"
+                    className={location.pathname === '/vendor' ? 'active' : ''}
+                  >
+                    Vendor Dashboard
+                  </Link>
                   <Link
                     to="/analytics"
                     className={location.pathname === '/analytics' ? 'active' : ''}
